@@ -750,7 +750,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-5xl font-bold text-slate-600 mb-2">2°</div>
-                    <div className="text-lg font-semibold text-slate-700">Las Águilas</div>
+                    <div className="text-lg font-semibold text-slate-700">Bertuca Jrs</div>
                   </div>
                 </div>
                 <div className="bg-white p-6 text-center border-t border-slate-200">
@@ -791,7 +791,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-6xl font-bold text-yellow-700 mb-2">1°</div>
-                    <div className="text-xl font-semibold text-yellow-800">Los Tigres</div>
+                    <div className="text-xl font-semibold text-yellow-800">CIANOS FC</div>
                   </div>
                 </div>
                 <div className="bg-white p-7 text-center border-t border-yellow-200">
@@ -827,7 +827,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-5xl font-bold text-amber-700 mb-2">3°</div>
-                    <div className="text-lg font-semibold text-amber-800">Las Panteras</div>
+                    <div className="text-lg font-semibold text-amber-800">Fecha Libre CF</div>
                   </div>
                 </div>
                 <div className="bg-white p-6 text-center border-t border-amber-200">
@@ -871,7 +871,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-4xl font-bold text-yellow-700 mb-1">1°</div>
-                    <div className="text-base font-semibold text-yellow-800">Los Tigres</div>
+                    <div className="text-base font-semibold text-yellow-800">CIANOS FC</div>
                   </div>
                 </div>
                 <div className="bg-white p-5 text-center border-t border-yellow-200">
@@ -908,7 +908,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-3xl font-bold text-slate-600 mb-1">2°</div>
-                    <div className="text-sm font-semibold text-slate-700">Las Águilas</div>
+                    <div className="text-sm font-semibold text-slate-700">Bertuca Jrs</div>
                   </div>
                 </div>
                 <div className="bg-white p-4 text-center border-t border-slate-200">
@@ -942,7 +942,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <div className="text-3xl font-bold text-amber-700 mb-1">3°</div>
-                    <div className="text-sm font-semibold text-amber-800">Las Panteras</div>
+                    <div className="text-sm font-semibold text-amber-800">Fecha Libre CF</div>
                   </div>
                 </div>
                 <div className="bg-white p-4 text-center border-t border-amber-200">
