@@ -41,7 +41,7 @@ const NavBar = () => {
     <>
       <nav 
         className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-        style={!isScrolled ? { backgroundColor: 'transparent', borderColor: 'transparent' } : { backgroundColor: 'hsl(343, 64%, 25%, 0.95)', backdropFilter: 'blur(8px)', borderBottom: '1px solid hsl(45, 90%, 57%, 0.2)' }}
+        style={!isScrolled ? { backgroundColor: 'transparent', borderColor: 'transparent' } : { backgroundColor: 'hsl(343, 64%, 25%, 0.95)', backdropFilter: 'blur(0.5rem)', borderBottom: '0.0625rem solid hsl(45, 90%, 57%, 0.2)' }}
       >
         <div className="container mx-auto px-4">
           <div className={`flex items-center h-20 justify-between gap-4`}>
@@ -113,8 +113,8 @@ const NavBar = () => {
             onClick={() => setIsOpen(false)}
             style={{ 
               backgroundColor: 'hsl(343, 64%, 25%, 0.95)',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
+              backdropFilter: 'blur(0.5rem)',
+              WebkitBackdropFilter: 'blur(0.5rem)'
             }}
           />
           <div className="fixed top-0 left-0 right-0 z-[101] md:hidden">

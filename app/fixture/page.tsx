@@ -115,14 +115,14 @@ export default function FixturePage() {
                     )}
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="w-[calc(100%-2rem)] max-w-[425px] rounded-2xl sm:rounded-lg">
+                <DialogContent className="w-[calc(100%-2rem)] max-w-[26.5625rem] rounded-2xl sm:rounded-lg">
                   <DialogHeader>
                     <DialogTitle>Filtrar por equipo</DialogTitle>
                   </DialogHeader>
                   <div className="grid gap-4 py-4">
                     {data && (
                       <>
-                        <ScrollArea className="h-[300px] pr-4">
+                        <ScrollArea className="h-[18.75rem] pr-4">
                           <div className="space-y-2">
                             {data.equipos
                               .filter((equipo) => equipo.categoria === category)

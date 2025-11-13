@@ -58,7 +58,7 @@ export default function QuienTomaMasPage() {
         {/* Podio - Desktop */}
         <div className="hidden md:flex items-end justify-center gap-6 max-w-5xl mx-auto mb-16">
           {/* 2do Lugar - Plata */}
-          <div className="flex-1 max-w-[220px]">
+          <div className="flex-1 max-w-[13.75rem]">
             <Card className="border-2 border-slate-300 bg-gradient-to-b from-slate-50 to-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
               <CardContent className="p-0">
                 <div className="bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 p-8 pb-6 relative">
@@ -93,7 +93,7 @@ export default function QuienTomaMasPage() {
           </div>
 
           {/* 1er Lugar - Oro */}
-          <div className="flex-1 max-w-[260px] relative -mt-8">
+          <div className="flex-1 max-w-[16.25rem] relative -mt-8">
             <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20">
               <div className="bg-gradient-to-br from-yellow-500 via-yellow-600 to-yellow-700 rounded-full p-3 shadow-lg">
                 <Trophy className="h-8 w-8 text-white" />
@@ -133,7 +133,7 @@ export default function QuienTomaMasPage() {
           </div>
 
           {/* 3er Lugar - Bronce */}
-          <div className="flex-1 max-w-[220px]">
+          <div className="flex-1 max-w-[13.75rem]">
             <Card className="border-2 border-amber-700 bg-gradient-to-b from-amber-50 to-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
               <CardContent className="p-0">
                 <div className="bg-gradient-to-br from-amber-100 via-amber-50 to-amber-100 p-8 pb-6 relative">
@@ -221,7 +221,7 @@ export default function QuienTomaMasPage() {
                   </div>
                   <div className="flex flex-col items-center pt-2">
                     <div className="mb-2 relative flex justify-center">
-                      <div className="beer-glass-container" style={{ width: '85px', height: '80px' }}>
+                      <div className="beer-glass-container" style={{ width: '5.3125rem', height: '5rem' }}>
                         <div className="beer-glass">
                           <div className="liquid-fill liquid-silver">
                             <div className="liquid-base"></div>
@@ -254,7 +254,7 @@ export default function QuienTomaMasPage() {
                   </div>
                   <div className="flex flex-col items-center pt-2">
                     <div className="mb-2 relative flex justify-center">
-                      <div className="beer-glass-container" style={{ width: '85px', height: '80px' }}>
+                      <div className="beer-glass-container" style={{ width: '5.3125rem', height: '5rem' }}>
                         <div className="beer-glass">
                           <div className="liquid-fill liquid-bronze">
                             <div className="liquid-base"></div>
@@ -294,7 +294,7 @@ export default function QuienTomaMasPage() {
 
         {/* Línea divisoria */}
         <div className="container mx-auto px-4 mb-8 md:mb-12">
-          <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
+          <div className="h-[0.125rem] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
         </div>
 
         {/* Ranking desde el 4to puesto */}

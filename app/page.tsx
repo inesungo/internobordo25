@@ -248,20 +248,20 @@ export default function HomePage() {
                     />
                   </div>
                   <div className="flex flex-col md:flex-row gap-2 md:gap-4 justify-center items-center">
-                    <Link href="/fixture" className="w-full md:w-auto max-w-[280px] md:max-w-none">
+                    <Link href="/fixture" className="w-full md:w-auto max-w-[17.5rem] md:max-w-none">
                       <Button
                         variant="outline"
                         size="lg"
-                        className="w-full md:min-w-[220px] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
+                        className="w-full md:min-w-[13.75rem] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
                       >
                         Ver Fixture
                       </Button>
                     </Link>
-                    <Link href="/tabla" className="hidden md:block w-full md:w-auto max-w-[280px] md:max-w-none">
+                    <Link href="/tabla" className="hidden md:block w-full md:w-auto max-w-[17.5rem] md:max-w-none">
                       <Button
                         variant="outline"
                         size="lg"
-                        className="w-full md:min-w-[220px] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
+                        className="w-full md:min-w-[13.75rem] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
                       >
                         Tabla de Posiciones
                       </Button>
@@ -344,7 +344,7 @@ export default function HomePage() {
               ].map((stat, index) => (
                 <Link key={index} href={stat.href} className="block text-center relative">
                   {index > 0 && (
-                    <div className="absolute left-0 top-1 bottom-1 w-[1.5px] bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
+                    <div className="absolute left-0 top-1 bottom-1 w-[0.09375rem] bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
                   )}
                   <div className="flex flex-col items-center justify-center">
                     <stat.icon className="hidden md:block h-6 w-6 md:h-8 md:w-8 text-secondary mb-2 md:mb-3" />
@@ -379,7 +379,7 @@ export default function HomePage() {
               alt="Próximos Partidos"
               width={600}
               height={300}
-              className="w-full h-[200px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-[12.5rem] sm:h-[15rem] md:h-[18.75rem] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent p-4 z-20">
               <p className="text-white font-bold text-lg">Próximos Partidos</p>
@@ -409,7 +409,7 @@ export default function HomePage() {
         {/* Desktop: Imagen a un lado y cards al otro */}
         <div className="hidden md:grid md:grid-cols-2 gap-6 mb-8">
           {/* Imagen con overlay */}
-          <div className="relative rounded-xl overflow-hidden shadow-2xl group h-[500px]">
+          <div className="relative rounded-xl overflow-hidden shadow-2xl group h-[31.25rem] md:h-[35rem] lg:h-[37.5rem]">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-secondary/20 z-10"></div>
             <Image
               src="/assets/proximos_partidos.jpeg"
@@ -468,7 +468,7 @@ export default function HomePage() {
 
       {/* Línea divisoria */}
       <div className="container mx-auto px-4 mb-8 md:mb-12">
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
+        <div className="h-[0.125rem] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
       </div>
 
       {/* Goleadores */}
@@ -489,7 +489,7 @@ export default function HomePage() {
               alt="Goleadores"
               width={600}
               height={300}
-              className="w-full h-[200px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
+              className="w-full h-[12.5rem] sm:h-[15rem] md:h-[18.75rem] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 z-20">
               <p className="text-white font-bold text-lg mb-2">Top Goleadores</p>
@@ -526,7 +526,7 @@ export default function HomePage() {
                               .toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div className="absolute -bottom-1 -right-1 bg-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">
+                        <div className="absolute -bottom-1 -right-1 bg-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-[0.625rem] font-bold">
                           🥇
                         </div>
                       </div>
@@ -536,7 +536,7 @@ export default function HomePage() {
                       </div>
                       <div className="flex flex-col items-center">
                         <div className="text-3xl font-bold text-primary">{topGoleadores.masculino.goles}</div>
-                        <p className="text-[10px] text-muted-foreground font-medium">goles</p>
+                        <p className="text-[0.625rem] text-muted-foreground font-medium">goles</p>
                       </div>
                     </div>
                   ) : (
@@ -567,7 +567,7 @@ export default function HomePage() {
                               .toUpperCase()}
                           </AvatarFallback>
                         </Avatar>
-                        <div className="absolute -bottom-1 -right-1 bg-secondary text-primary rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-bold">
+                        <div className="absolute -bottom-1 -right-1 bg-secondary text-primary rounded-full w-5 h-5 flex items-center justify-center text-[0.625rem] font-bold">
                           🥇
                         </div>
                       </div>
@@ -577,7 +577,7 @@ export default function HomePage() {
                       </div>
                       <div className="flex flex-col items-center">
                         <div className="text-3xl font-bold text-secondary">{topGoleadores.femenino.goles}</div>
-                        <p className="text-[10px] text-muted-foreground font-medium">goles</p>
+                        <p className="text-[0.625rem] text-muted-foreground font-medium">goles</p>
                       </div>
                     </div>
                   ) : (
@@ -706,7 +706,7 @@ export default function HomePage() {
 
       {/* Línea divisoria */}
       <div className="container mx-auto px-4 mb-8 md:mb-12">
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
+        <div className="h-[0.125rem] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
       </div>
 
       {/* ¿Quién Toma Más? */}
@@ -726,7 +726,7 @@ export default function HomePage() {
         {/* Podio - Desktop */}
         <div className="hidden md:flex items-end justify-center gap-6 max-w-5xl mx-auto">
           {/* 2do Lugar - Plata */}
-          <div className="flex-1 max-w-[220px]">
+                      <div className="flex-1 max-w-[13.75rem]">
             <Card className="border-2 border-slate-300 bg-gradient-to-b from-slate-50 to-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
               <CardContent className="p-0">
                 <div className="bg-gradient-to-br from-slate-100 via-slate-50 to-slate-100 p-8 pb-6 relative">
@@ -762,7 +762,7 @@ export default function HomePage() {
           </div>
 
           {/* 1er Lugar - Oro */}
-          <div className="flex-1 max-w-[260px] relative -mt-8">
+          <div className="flex-1 max-w-[16.25rem] relative -mt-8">
             <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 z-20">
               <div className="bg-gradient-to-br from-yellow-500 via-yellow-600 to-yellow-700 rounded-full p-3 shadow-lg">
                 <Trophy className="h-8 w-8 text-white" />
@@ -803,7 +803,7 @@ export default function HomePage() {
           </div>
 
           {/* 3er Lugar - Bronce */}
-          <div className="flex-1 max-w-[220px]">
+                      <div className="flex-1 max-w-[13.75rem]">
             <Card className="border-2 border-amber-700 bg-gradient-to-b from-amber-50 to-white shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
               <CardContent className="p-0">
                 <div className="bg-gradient-to-br from-amber-100 via-amber-50 to-amber-100 p-8 pb-6 relative">
@@ -894,7 +894,7 @@ export default function HomePage() {
                   <div className="flex flex-col items-center pt-2">
                     {/* Vaso de cerveza con líquido animado */}
                     <div className="mb-2 relative flex justify-center">
-                      <div className="beer-glass-container" style={{ width: '85px', height: '80px' }}>
+                      <div className="beer-glass-container" style={{ width: '5.3125rem', height: '5rem' }}>
                         <div className="beer-glass">
                           <div className="liquid-fill liquid-silver">
                             <div className="liquid-base"></div>
@@ -928,7 +928,7 @@ export default function HomePage() {
                   <div className="flex flex-col items-center pt-2">
                     {/* Vaso de cerveza con líquido animado - Bronce a la mitad */}
                     <div className="mb-2 relative">
-                      <div className="beer-glass-container" style={{ width: '60px', height: '80px' }}>
+                      <div className="beer-glass-container" style={{ width: '3.75rem', height: '5rem' }}>
                         <div className="beer-glass">
                           <div className="liquid-fill liquid-bronze">
                             <div className="liquid-base"></div>
@@ -957,7 +957,7 @@ export default function HomePage() {
 
       {/* Línea divisoria - Solo mobile */}
       <div className="md:hidden container mx-auto px-4 mb-8">
-        <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
+        <div className="h-[0.125rem] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
       </div>
 
       {/* Sponsors */}
@@ -977,7 +977,7 @@ export default function HomePage() {
               {sponsors.map((sponsor, index) => (
                 <CarouselItem key={index} className="pl-2 md:pl-4 basis-[45%]">
                   <Card className="hover:shadow-lg transition-all bg-white h-full">
-                    <CardContent className="p-2 flex items-center justify-center h-[80px]">
+                    <CardContent className="p-2 flex items-center justify-center h-[5rem]">
                       <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
                         <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
                           <Image
@@ -1004,7 +1004,7 @@ export default function HomePage() {
         <div className="hidden md:grid md:grid-cols-4 gap-2">
           {sponsors.map((sponsor, index) => (
             <Card key={index} className="hover:shadow-lg transition-all bg-white h-full">
-              <CardContent className="p-2 flex items-center justify-center h-[80px]">
+                    <CardContent className="p-2 flex items-center justify-center h-[5rem]">
                 <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
                   <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
                     <Image

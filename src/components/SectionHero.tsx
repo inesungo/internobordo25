@@ -10,7 +10,7 @@ interface SectionHeroProps {
 
 export default function SectionHero({ title, subtitle, imageSrc, icon }: SectionHeroProps) {
   return (
-    <div className="relative w-full h-[350px] sm:h-[400px] md:h-[500px] lg:h-[550px] overflow-hidden -mt-20">
+    <div className="relative w-full h-[21.875rem] sm:h-[25rem] md:h-[31.25rem] lg:h-[34.375rem] overflow-hidden -mt-20">
       {/* Imagen de fondo */}
       <div className="absolute inset-0">
         <Image
