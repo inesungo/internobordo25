@@ -66,15 +66,6 @@ export default function TablaPage() {
           </TabsList>
 
           <TabsContent value="Masculino" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl text-primary">Tabla General</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <TablaPosiciones standings={standingsGeneral} />
-              </CardContent>
-            </Card>
-
             {grupos.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {grupos.map((grupo) => {
@@ -109,30 +100,6 @@ export default function TablaPage() {
                 <TablaPosiciones standings={standingsGeneral} />
               </CardContent>
             </Card>
-
-            {grupos.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {grupos.map((grupo) => {
-                  const standingsGrupo = buildStandings(
-                    data.equipos,
-                    data.partidos,
-                    data.resultados,
-                    category,
-                    grupo
-                  );
-                  return (
-                    <Card key={grupo}>
-                      <CardHeader>
-                        <CardTitle className="text-xl text-primary">Grupo {grupo}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <TablaPosiciones standings={standingsGrupo} />
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              </div>
-            )}
           </TabsContent>
         </Tabs>
       </div>

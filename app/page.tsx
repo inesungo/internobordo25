@@ -1,6 +1,6 @@
 'use client';
 
-import { Trophy, Calendar, Users, Instagram, Camera, Share2, Target, Loader2 } from 'lucide-react';
+import { Trophy, Calendar, Users, Instagram, Camera, Target, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -16,7 +16,7 @@ import {
 import Autoplay from 'embla-carousel-autoplay';
 import NavBar from '@/components/NavBar';
 import MatchCard from '@/components/MatchCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import dayjs from 'dayjs';
 import type { TournamentData } from '@/lib/data';
 
@@ -29,6 +29,7 @@ export default function HomePage() {
   }>({ masculino: null, femenino: null });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [animatedStats, setAnimatedStats] = useState({ equipos: 0, partidos: 0, jugadores: 0 });
 
   useEffect(() => {
     let mounted = true;
@@ -156,6 +157,48 @@ export default function HomePage() {
     };
   }, []);
 
+  // Animación de conteo para las estadísticas
+  useEffect(() => {
+    if (loading) return;
+
+    const duration = 1500; // Duración de la animación en ms
+    const steps = 60; // Número de pasos
+    const stepDuration = duration / steps;
+
+    const animateValue = (
+      start: number,
+      end: number,
+      callback: (value: number) => void
+    ) => {
+      const increment = (end - start) / steps;
+      let current = start;
+      let step = 0;
+
+      const timer = setInterval(() => {
+        step++;
+        current = Math.min(start + increment * step, end);
+        callback(Math.floor(current));
+
+        if (step >= steps) {
+          clearInterval(timer);
+          callback(end);
+        }
+      }, stepDuration);
+    };
+
+    animateValue(0, stats.equipos, (value) => {
+      setAnimatedStats((prev) => ({ ...prev, equipos: value }));
+    });
+
+    animateValue(0, stats.partidos, (value) => {
+      setAnimatedStats((prev) => ({ ...prev, partidos: value }));
+    });
+
+    animateValue(0, stats.jugadores, (value) => {
+      setAnimatedStats((prev) => ({ ...prev, jugadores: value }));
+    });
+  }, [stats, loading]);
+
   type Sponsor = {
     image: string;
     height?: string;
@@ -188,36 +231,37 @@ export default function HomePage() {
             {/* Slide 1: Interno Bordo */}
             <CarouselItem>
               <div 
-                className="relative h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
+                className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden bg-cover bg-center"
                 style={{ backgroundImage: 'url(/assets/foto2.jpeg)' }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/70 to-accent/60" />
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41IiBvcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-10" />
                 
-                <div className="relative z-30 text-center px-4 animate-fade-in mb-16">
-                  <div className="mb-4 flex justify-center">
+                <div className="relative z-30 text-center px-4 animate-fade-in mb-8 md:mb-16">
+                  <div className="mb-2 md:mb-4 flex justify-center">
                     <Image
                       src="/assets/logo_interno.png"
                       alt="Interno Bordo"
                       width={400}
                       height={200}
-                      className="object-contain drop-shadow-lg"
+                      className="object-contain drop-shadow-lg w-56 md:w-96 h-auto"
                     />
                   </div>
-                  <div className="flex flex-wrap gap-4 justify-center">
-                    <Link href="/fixture">
+                  <div className="flex flex-col md:flex-row gap-2 md:gap-4 justify-center items-center">
+                    <Link href="/fixture" className="w-full md:w-auto max-w-[280px] md:max-w-none">
                       <Button
+                        variant="outline"
                         size="lg"
-                        className="bg-secondary text-primary hover:bg-secondary/90 font-bold text-lg px-8"
+                        className="w-full md:min-w-[220px] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
                       >
                         Ver Fixture
                       </Button>
                     </Link>
-                    <Link href="/tabla">
+                    <Link href="/tabla" className="hidden md:block w-full md:w-auto max-w-[280px] md:max-w-none">
                       <Button
-                        size="lg"
                         variant="outline"
-                        className="border-secondary text-secondary hover:bg-secondary/10 font-bold text-lg px-8"
+                        size="lg"
+                        className="w-full md:min-w-[220px] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
                       >
                         Tabla de Posiciones
                       </Button>
@@ -257,59 +301,64 @@ export default function HomePage() {
             {/* Slide 3: Redes Sociales */}
             <CarouselItem>
               <div 
-                className="relative h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
+                className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden bg-cover bg-center"
                 style={{ backgroundImage: 'url(/assets/foto3.jpeg)' }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/70 to-accent/60" />
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41IiBvcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-10" />
                 
                 <div className="relative z-10 text-center px-4 animate-fade-in">
-                  <Share2 className="h-24 w-24 text-secondary mx-auto mb-6 drop-shadow-lg" />
-                  <h2 className="text-4xl md:text-6xl font-bold text-secondary mb-4 drop-shadow-lg">
+                  <Instagram className="h-12 w-12 md:h-24 md:w-24 text-white mx-auto mb-3 md:mb-6 drop-shadow-lg" />
+                  <h2 className="text-2xl md:text-6xl font-bold text-white mb-2 md:mb-4 drop-shadow-lg">
                     SEGUÍ EL TORNEO
                   </h2>
-                  <p className="text-xl md:text-2xl text-secondary/90 mb-8 max-w-2xl mx-auto">
+                  <p className="text-sm md:text-2xl text-white/80 mb-4 md:mb-8 max-w-2xl mx-auto">
                     Unite a nuestra comunidad en redes sociales
                   </p>
                   <Button
+                    variant="outline"
                     size="lg"
-                    className="bg-secondary text-primary hover:bg-secondary/90 font-bold text-lg px-8"
+                    className="border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-sm md:text-lg px-4 md:px-8 py-2 md:py-3"
                     onClick={() => window.open('https://www.instagram.com/internobordo?igsh=YXp0N2F0ZWszMTU0', '_blank')}
                   >
-                    <Instagram className="mr-2 h-5 w-5" />
-                    Seguinos en Instagram
+                    @internobordo
                   </Button>
                 </div>
               </div>
             </CarouselItem>
           </CarouselContent>
-          <CarouselPrevious className="left-4 bg-secondary/90 text-primary border-0 hover:bg-secondary" />
-          <CarouselNext className="right-4 bg-secondary/90 text-primary border-0 hover:bg-secondary" />
+          <CarouselPrevious className="left-4 bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20 hover:text-white" />
+          <CarouselNext className="right-4 bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20 hover:text-white" />
         </Carousel>
       </section>
 
       {/* Quick Stats */}
-      <section className="container mx-auto px-4 -mt-32 relative z-10 mb-6 md:mb-16 pb-8 md:pb-20">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {[
-            { icon: Trophy, label: 'Equipos', value: stats.equipos || 0, color: 'text-secondary', suffix: '', href: '/equipos' },
-            { icon: Calendar, label: 'Partidos', value: stats.partidos || 0, color: 'text-secondary', suffix: '', href: '/fixture' },
-            { icon: Users, label: 'Jugadores', value: stats.jugadores || 0, color: 'text-secondary', suffix: ' ', href: '/equipos' },
-          ].map((stat, index) => (
-            <Link key={index} href={stat.href} className="block w-full">
-              <Card className="bg-card/95 backdrop-blur-sm border-border hover:shadow-xl transition-all animate-scale-in cursor-pointer hover:scale-105 w-full">
-                <CardContent className="p-4 md:p-6 text-center">
-                  <stat.icon className={`h-8 w-8 md:h-12 md:w-12 mx-auto mb-2 md:mb-3 ${stat.color}`} />
-                  <p className="text-2xl md:text-3xl font-bold text-primary mb-1">
-                    {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
-                    {stat.suffix || ''}
-                  </p>
-                  <p className="text-sm md:text-base text-muted-foreground font-medium">{stat.label}</p>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
+      <section className="container mx-auto px-4 -mt-12 md:-mt-16 relative z-10 mb-6 md:mb-10 pb-8 md:pb-12">
+        <Card className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg overflow-hidden">
+          <CardContent className="p-4 md:p-6">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              {[
+                { icon: Trophy, label: 'EQUIPOS', value: animatedStats.equipos || 0, suffix: '', href: '/equipos' },
+                { icon: Calendar, label: 'PARTIDOS', value: animatedStats.partidos || 0, suffix: '', href: '/fixture' },
+                { icon: Users, label: 'JUGADORES', value: animatedStats.jugadores || 0, suffix: '', href: '/equipos' },
+              ].map((stat, index) => (
+                <Link key={index} href={stat.href} className="block text-center relative">
+                  {index > 0 && (
+                    <div className="absolute left-0 top-1 bottom-1 w-[1.5px] bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
+                  )}
+                  <div className="flex flex-col items-center justify-center">
+                    <stat.icon className="hidden md:block h-6 w-6 md:h-8 md:w-8 text-secondary mb-2 md:mb-3" />
+                    <p className="text-2xl md:text-4xl font-bold text-primary mb-1">
+                      {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
+                      {stat.suffix || ''}
+                    </p>
+                    <p className="text-xs md:text-sm text-primary font-semibold uppercase">{stat.label}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
       {/* Próximos Partidos */}
@@ -340,9 +389,20 @@ export default function HomePage() {
 
           {/* Cards de partidos - Solo 2 en mobile */}
           <div className="flex flex-col gap-4">
-            {upcomingMatches.slice(0, 2).map((match, index) => (
-              <MatchCard key={index} {...match} />
-            ))}
+            {upcomingMatches.length > 0 ? (
+              upcomingMatches.slice(0, 2).map((match, index) => (
+                <MatchCard key={index} {...match} />
+              ))
+            ) : (
+              <Card className="bg-white border-2 border-primary/20">
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-center justify-center py-8 gap-3">
+                    <Loader2 className="h-12 w-12 animate-spin" style={{ color: 'hsl(343, 64%, 25%)' }} />
+                    <p className="text-muted-foreground text-center text-sm">Esperando que arranque el campeonato</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 
@@ -375,9 +435,20 @@ export default function HomePage() {
 
           {/* Cards de partidos - Solo 3 en desktop */}
           <div className="flex flex-col gap-3">
-            {upcomingMatches.slice(0, 3).map((match, index) => (
-            <MatchCard key={index} {...match} />
-          ))}
+            {upcomingMatches.length > 0 ? (
+              upcomingMatches.slice(0, 3).map((match, index) => (
+                <MatchCard key={index} {...match} />
+              ))
+            ) : (
+              <Card className="bg-white border-2 border-primary/20 h-full">
+                <CardContent className="p-8 h-full flex items-center justify-center">
+                  <div className="flex flex-col items-center justify-center py-8 gap-3 w-full">
+                    <Loader2 className="h-12 w-12 animate-spin" style={{ color: 'hsl(343, 64%, 25%)' }} />
+                    <p className="text-muted-foreground text-center text-sm">Esperando que arranque el campeonato</p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
 
@@ -395,8 +466,13 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Línea divisoria */}
+      <div className="container mx-auto px-4 mb-8 md:mb-12">
+        <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
+      </div>
+
       {/* Goleadores */}
-      <section className="container mx-auto px-4 mb-16">
+      <section className="container mx-auto px-4 mb-16 md:mb-24">
         {/* Título solo en desktop */}
         <h2 className="hidden md:flex text-4xl font-bold text-secondary mb-8 items-center gap-3">
           <Target className="h-10 w-10 text-secondary" />
@@ -415,9 +491,18 @@ export default function HomePage() {
               height={300}
               className="w-full h-[200px] object-cover rounded-xl transition-transform duration-500 group-hover:scale-105"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent p-4 z-20">
-              <p className="text-white font-bold text-lg">Top Goleadores</p>
-              <p className="text-white/80 text-xs">Los mejores del torneo</p>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-4 z-20">
+              <p className="text-white font-bold text-lg mb-2">Top Goleadores</p>
+              <p className="text-white/80 text-xs mb-3">Los mejores del torneo</p>
+              <Link href="/estadisticas">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white text-sm"
+                >
+                  Ver más
+                </Button>
+              </Link>
             </div>
           </div>
 
@@ -617,19 +702,12 @@ export default function HomePage() {
           </div>
         </div>
         
-        {/* Botón en mobile */}
-        <div className="md:hidden text-center mt-4">
-          <Link href="/estadisticas">
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-primary text-primary hover:bg-primary/10"
-            >
-              Ver tabla goleadores
-            </Button>
-          </Link>
-        </div>
       </section>
+
+      {/* Línea divisoria - Solo mobile */}
+      <div className="md:hidden container mx-auto px-4 mb-8">
+        <div className="h-[2px] bg-gradient-to-r from-transparent via-secondary/80 via-secondary/80 to-transparent"></div>
+      </div>
 
       {/* Sponsors */}
       <section className="container mx-auto px-4 py-4 sm:py-4 md:py-3 mb-8 sm:mb-10 md:mb-12">
