@@ -8,18 +8,16 @@ import { Card, CardContent } from '@/components/ui/card';
 // Datos mock - se reemplazarán cuando tengan la tabla en sheets
 const mockData = {
   top3: [
-    { position: 1, team: 'Los Tigres', bottles: 187, color: 'gold' },
-    { position: 2, team: 'Las Águilas', bottles: 124, color: 'silver' },
-    { position: 3, team: 'Las Panteras', bottles: 98, color: 'bronze' },
+    { position: 1, team: 'CIANOS FC', bottles: 187, color: 'gold' },
+    { position: 2, team: 'Bertuca Jrs', bottles: 124, color: 'silver' },
+    { position: 3, team: 'Fecha Libre CF', bottles: 98, color: 'bronze' },
   ],
   ranking: [
-    { position: 4, team: 'Los Leones', bottles: 87 },
-    { position: 5, team: 'Los Halcones', bottles: 76 },
-    { position: 6, team: 'Las Estrellas', bottles: 65 },
-    { position: 7, team: 'Los Lobos', bottles: 54 },
-    { position: 8, team: 'Los Osos', bottles: 43 },
-    { position: 9, team: 'Los Zorros', bottles: 32 },
-    { position: 10, team: 'Los Pumas', bottles: 21 },
+    { position: 4, team: 'Filial Hamburgo', bottles: 87 },
+    { position: 5, team: 'Vayvo FC', bottles: 76 },
+    { position: 6, team: 'Galacticazs FC', bottles: 65 },
+    { position: 7, team: 'Mariscos', bottles: 54 },
+    
   ],
 };
 
