@@ -40,7 +40,12 @@ export default function HomePage() {
         setError(null);
         
         // Llamar a la API route en lugar de getData directo
-        const response = await fetch('/api/data');
+        const response = await fetch('/api/data', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
         
         if (!response.ok) {
           throw new Error(`Error HTTP: ${response.status}`);
@@ -150,10 +155,19 @@ export default function HomePage() {
       }
     }
     
+    // Cargar datos inicialmente
     loadData();
+    
+    // Refrescar datos cada 2 minutos (120000 ms)
+    const intervalId = setInterval(() => {
+      if (mounted) {
+        loadData();
+      }
+    }, 120000);
     
     return () => {
       mounted = false;
+      clearInterval(intervalId);
     };
   }, []);
 
@@ -389,7 +403,16 @@ export default function HomePage() {
 
           {/* Cards de partidos - Solo 2 en mobile */}
           <div className="flex flex-col gap-4">
-            {upcomingMatches.length > 0 ? (
+            {loading ? (
+              <Card className="bg-white border-2 border-primary/20">
+                <CardContent className="p-8">
+                  <div className="flex flex-col items-center justify-center py-8 gap-3">
+                    <Loader2 className="h-12 w-12 animate-spin" style={{ color: 'hsl(343, 64%, 25%)' }} />
+                    <p className="text-muted-foreground text-center text-sm">Cargando próximos partidos...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : upcomingMatches.length > 0 ? (
               upcomingMatches.slice(0, 2).map((match, index) => (
                 <MatchCard key={index} {...match} />
               ))
@@ -435,7 +458,16 @@ export default function HomePage() {
 
           {/* Cards de partidos - Solo 3 en desktop */}
           <div className="flex flex-col gap-3">
-            {upcomingMatches.length > 0 ? (
+            {loading ? (
+              <Card className="bg-white border-2 border-primary/20 h-full">
+                <CardContent className="p-8 h-full flex items-center justify-center">
+                  <div className="flex flex-col items-center justify-center py-8 gap-3 w-full">
+                    <Loader2 className="h-12 w-12 animate-spin" style={{ color: 'hsl(343, 64%, 25%)' }} />
+                    <p className="text-muted-foreground text-center text-sm">Cargando próximos partidos...</p>
+                  </div>
+                </CardContent>
+              </Card>
+            ) : upcomingMatches.length > 0 ? (
               upcomingMatches.slice(0, 3).map((match, index) => (
                 <MatchCard key={index} {...match} />
               ))

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Filter } from 'lucide-react';
+import { Filter, Loader2 } from 'lucide-react';
 import NavBar from '@/components/NavBar';
 import SectionHero from '@/components/SectionHero';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent } from '@/components/ui/card';
 import ListaPartidos from '@/components/ListaPartidos';
 import type { TournamentData } from '@/lib/data';
 
@@ -20,17 +21,40 @@ export default function FixturePage() {
   const [data, setData] = useState<TournamentData | null>(null);
 
   useEffect(() => {
+    let mounted = true;
+    
     async function loadData() {
       try {
-        const response = await fetch('/api/data');
+        const response = await fetch('/api/data', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
         const tournamentData: TournamentData = await response.json();
-        setData(tournamentData);
+        if (mounted) {
+          setData(tournamentData);
+        }
       } catch (error) {
         console.error('Error loading data:', error);
       }
     }
+    
+    // Cargar datos inicialmente
     loadData();
+    
+    // Refrescar datos cada 2 minutos (120000 ms)
+    const intervalId = setInterval(() => {
+      if (mounted) {
+        loadData();
+      }
+    }, 120000);
+    
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   // Limpiar equipos seleccionados cuando cambia la categoría
@@ -47,8 +71,20 @@ export default function FixturePage() {
     return (
       <div className="min-h-screen bg-background">
         <NavBar />
+        <SectionHero
+          title="Fixture del Torneo"
+          subtitle="Consulta todos los partidos programados y resultados"
+          imageSrc="/assets/fixture.jpeg"
+        />
         <div className="container mx-auto px-4 py-12">
-          <p className="text-center">Cargando...</p>
+          <Card className="bg-white border-2 border-primary/20">
+            <CardContent className="p-8">
+              <div className="flex flex-col items-center justify-center py-8 gap-3">
+                <Loader2 className="h-12 w-12 animate-spin" style={{ color: 'hsl(343, 64%, 25%)' }} />
+                <p className="text-muted-foreground text-center text-sm">Cargando partidos...</p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );

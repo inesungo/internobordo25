@@ -17,17 +17,40 @@ export default function TablaPage() {
   const [grupos, setGrupos] = useState<string[]>([]);
 
   useEffect(() => {
+    let mounted = true;
+    
     async function loadData() {
       try {
-        const response = await fetch('/api/data');
+        const response = await fetch('/api/data', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache',
+          },
+        });
         if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
         const tournamentData: TournamentData = await response.json();
-        setData(tournamentData);
+        if (mounted) {
+          setData(tournamentData);
+        }
       } catch (error) {
         console.error('Error loading data:', error);
       }
     }
+    
+    // Cargar datos inicialmente
     loadData();
+    
+    // Refrescar datos cada 2 minutos (120000 ms)
+    const intervalId = setInterval(() => {
+      if (mounted) {
+        loadData();
+      }
+    }, 120000);
+    
+    return () => {
+      mounted = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {

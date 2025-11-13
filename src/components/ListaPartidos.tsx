@@ -1,5 +1,7 @@
 import MatchCard from './MatchCard';
 import { Partido, Resultado, Equipo } from '@/lib/types';
+import { Loader2 } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 import dayjs from 'dayjs';
 
 interface ListaPartidosProps {
@@ -37,6 +39,19 @@ export default function ListaPartidos({ partidos, resultados, equipos, categoria
     const dateB = dayjs(`${b.fecha} ${b.hora}`);
     return dateA.diff(dateB);
   });
+
+  if (partidosOrdenados.length === 0) {
+    return (
+      <Card className="bg-white border-2 border-primary/20">
+        <CardContent className="p-8">
+          <div className="flex flex-col items-center justify-center py-8 gap-3">
+            <Loader2 className="h-12 w-12 animate-spin" style={{ color: 'hsl(343, 64%, 25%)' }} />
+            <p className="text-muted-foreground text-center text-sm">Esperando que arranque el campeonato</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
