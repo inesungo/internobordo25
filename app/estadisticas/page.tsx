@@ -49,7 +49,7 @@ export default function EstadisticasPage() {
         title="Estadísticas"
         subtitle="Goleadores y arqueros menos vencidos del torneo"
         imageSrc="/assets/estadisticas.jpeg"
-        icon={<Target className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 text-secondary drop-shadow-lg" />}
+        
       />
 
       <div className="container mx-auto px-4 py-8 sm:py-12">

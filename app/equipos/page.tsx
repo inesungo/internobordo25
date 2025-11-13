@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Users } from 'lucide-react';
+import { useState, useEffect, useMemo } from 'react';
+import { Users, Search, X } from 'lucide-react';
 import NavBar from '@/components/NavBar';
 import SectionHero from '@/components/SectionHero';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,12 +13,14 @@ import {
 } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
 import Image from 'next/image';
 import type { TournamentData } from '@/lib/data';
 
 export default function EquiposPage() {
   const [category, setCategory] = useState<'Masculino' | 'Femenino'>('Masculino');
   const [data, setData] = useState<TournamentData | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     async function loadData() {
@@ -34,6 +36,30 @@ export default function EquiposPage() {
     loadData();
   }, []);
 
+  // Filtrar equipos según la búsqueda y categoría
+  const equiposFiltrados = useMemo(() => {
+    if (!data) return [];
+    let equipos = data.equipos.filter((e: any) => e.categoria === category);
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      equipos = equipos.filter((e: any) => 
+        e.nombre.toLowerCase().includes(query)
+      );
+    }
+    
+    return equipos;
+  }, [data, category, searchQuery]);
+
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
+
   if (!data) {
     return (
       <div className="min-h-screen bg-background">
@@ -45,14 +71,6 @@ export default function EquiposPage() {
     );
   }
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .toUpperCase();
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
@@ -60,26 +78,55 @@ export default function EquiposPage() {
         title="Equipos"
         subtitle="Conoce todos los equipos y sus integrantes"
         imageSrc="/assets/equipos.jpeg"
-        icon={<Users className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 text-secondary drop-shadow-lg" />}
+        
       />
 
       <div className="container mx-auto px-4 py-8 sm:py-12">
 
         <Tabs defaultValue="Masculino" className="animate-scale-in">
+          <div className="mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground z-10 pointer-events-none" />
+              <Input
+                placeholder="Buscar equipo..."
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                }}
+                className="pl-10 pr-10"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                  }}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground z-10"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
           <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
-            <TabsTrigger value="Masculino" onClick={() => setCategory('Masculino')}>
+            <TabsTrigger value="Masculino" onClick={() => {
+              setCategory('Masculino');
+              setSearchQuery('');
+            }}>
               Masculino
             </TabsTrigger>
-            <TabsTrigger value="Femenino" onClick={() => setCategory('Femenino')}>
+            <TabsTrigger value="Femenino" onClick={() => {
+              setCategory('Femenino');
+              setSearchQuery('');
+            }}>
               Femenino
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="Masculino">
             <Accordion type="single" collapsible className="space-y-4">
-              {data.equipos
-                .filter((e: any) => e.categoria === 'Masculino')
-                .map((equipo: any, index: number) => {
+              {equiposFiltrados.map((equipo: any, index: number) => {
                   const jugadoresEquipo = data.jugadores?.filter((j: any) => j.equipo_id === equipo.id) || [];
                   const uniqueKey = equipo.id || `masculino-${index}-${equipo.nombre}`;
                   return (
@@ -114,20 +161,20 @@ export default function EquiposPage() {
                       </AccordionTrigger>
                       <AccordionContent className="px-6 pb-6 pt-4">
                         {jugadoresEquipo.length > 0 ? (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
                             {jugadoresEquipo.map((jugador: any, jugadorIndex: number) => (
                               <div
                                 key={jugador.id || `jugador-${uniqueKey}-${jugadorIndex}`}
-                                className="relative bg-gradient-to-br from-muted/40 to-muted/20 rounded-lg p-4 hover:from-muted/60 hover:to-muted/40 transition-all hover:scale-105 border border-border group"
+                                className="relative bg-gradient-to-br from-muted/40 to-muted/20 rounded-lg p-3 md:p-4 hover:from-muted/60 hover:to-muted/40 transition-all hover:scale-105 border border-border group aspect-square flex items-center justify-center"
                               >
-                                <div className="flex flex-col items-center text-center gap-3">
-                                  <Avatar className="h-16 w-16 bg-gradient-to-br from-primary to-accent border-2 border-secondary group-hover:scale-110 transition-transform">
-                                    <AvatarFallback className="text-secondary font-bold text-lg">
+                                <div className="flex flex-col items-center text-center gap-2 md:gap-3 w-full">
+                                  <Avatar className="h-12 w-12 md:h-16 md:w-16 bg-gradient-to-br from-primary to-accent border-2 border-secondary group-hover:scale-110 transition-transform">
+                                    <AvatarFallback className="text-secondary font-bold text-sm md:text-lg">
                                       {getInitials(`${jugador.nombre} ${jugador.apellido}`)}
                                     </AvatarFallback>
                                   </Avatar>
-                                  <div className="flex-1">
-                                    <p className="font-bold text-sm text-foreground leading-tight">
+                                  <div className="flex-1 flex items-center justify-center">
+                                    <p className="font-bold text-xs md:text-sm text-foreground leading-tight">
                                       {jugador.nombre} {jugador.apellido}
                                     </p>
                                   </div>
@@ -149,9 +196,7 @@ export default function EquiposPage() {
 
           <TabsContent value="Femenino">
             <Accordion type="single" collapsible className="space-y-4">
-              {data.equipos
-                .filter((e: any) => e.categoria === 'Femenino')
-                .map((equipo: any, index: number) => {
+              {equiposFiltrados.map((equipo: any, index: number) => {
                   const jugadoresEquipo = data.jugadores?.filter((j: any) => j.equipo_id === equipo.id) || [];
                   const uniqueKey = equipo.id || `femenino-${index}-${equipo.nombre}`;
                   return (
@@ -186,20 +231,20 @@ export default function EquiposPage() {
                       </AccordionTrigger>
                       <AccordionContent className="px-6 pb-6 pt-4">
                         {jugadoresEquipo.length > 0 ? (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
                             {jugadoresEquipo.map((jugador: any, jugadorIndex: number) => (
                               <div
                                 key={jugador.id || `jugador-${uniqueKey}-${jugadorIndex}`}
-                                className="relative bg-gradient-to-br from-muted/40 to-muted/20 rounded-lg p-4 hover:from-muted/60 hover:to-muted/40 transition-all hover:scale-105 border border-border group"
+                                className="relative bg-gradient-to-br from-muted/40 to-muted/20 rounded-lg p-3 md:p-4 hover:from-muted/60 hover:to-muted/40 transition-all hover:scale-105 border border-border group aspect-square flex items-center justify-center"
                               >
-                                <div className="flex flex-col items-center text-center gap-3">
-                                  <Avatar className="h-16 w-16 bg-gradient-to-br from-primary to-accent border-2 border-secondary group-hover:scale-110 transition-transform">
-                                    <AvatarFallback className="text-secondary font-bold text-lg">
+                                <div className="flex flex-col items-center text-center gap-2 md:gap-3 w-full">
+                                  <Avatar className="h-12 w-12 md:h-16 md:w-16 bg-gradient-to-br from-primary to-accent border-2 border-secondary group-hover:scale-110 transition-transform">
+                                    <AvatarFallback className="text-secondary font-bold text-sm md:text-lg">
                                       {getInitials(`${jugador.nombre} ${jugador.apellido}`)}
                                     </AvatarFallback>
                                   </Avatar>
-                                  <div className="flex-1">
-                                    <p className="font-bold text-sm text-foreground leading-tight">
+                                  <div className="flex-1 flex items-center justify-center">
+                                    <p className="font-bold text-xs md:text-sm text-foreground leading-tight">
                                       {jugador.nombre} {jugador.apellido}
                                     </p>
                                   </div>

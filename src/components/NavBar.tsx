@@ -34,83 +34,91 @@ const NavBar = () => {
     { name: 'Posiciones', path: '/tabla' },
     { name: 'Estadísticas', path: '/estadisticas' },
     { name: 'Equipos', path: '/equipos' },
-    { name: '¿Quién Toma Más?', path: '/quien-toma-mas' },
-  ];
+    { name: '¿Quién Toma Más?', path: '/quien-toma-mas', hidden: true },
+  ].filter(item => !item.hidden);
 
   return (
-    <nav 
-      className={`${isHome ? 'fixed' : 'sticky'} top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled || !isHome
-          ? 'bg-primary/95 backdrop-blur-sm border-b border-secondary/20' 
-          : ''
-      }`}
-      style={!isScrolled && isHome ? { backgroundColor: 'transparent', borderColor: 'transparent' } : undefined}
-    >
-      <div className="container mx-auto px-4">
-        <div className={`flex items-center h-20 justify-between gap-4`}>
-          {isHome ? (
-            isScrolled && (
-              <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
-                <Link href="/" className="flex items-center hover:opacity-80 transition-opacity flex-shrink-0">
-                  <Image src="/assets/logo_interno.png" alt="Club Seminario" className="h-10 w-10 md:h-14 md:w-14 object-contain" width={56} height={56} />
-                </Link>
-                <div className="flex-1 min-w-0">
-                  <Countdown targetDate="2025-11-17" />
+    <>
+      <nav 
+        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
+        style={!isScrolled ? { backgroundColor: 'transparent', borderColor: 'transparent' } : { backgroundColor: 'hsl(343, 64%, 25%, 0.95)', backdropFilter: 'blur(8px)', borderBottom: '1px solid hsl(45, 90%, 57%, 0.2)' }}
+      >
+        <div className="container mx-auto px-4">
+          <div className={`flex items-center h-20 justify-between gap-4`}>
+            {isHome ? (
+              isScrolled && (
+                <div className="flex items-center gap-2 md:gap-4 flex-1 min-w-0">
+                  <Link href="/" className="flex items-center hover:opacity-80 transition-opacity flex-shrink-0">
+                    <Image src="/assets/logo_interno.png" alt="Club Seminario" className="h-10 w-10 md:h-14 md:w-14 object-contain" width={56} height={56} />
+                  </Link>
+                  <div className="flex-1 min-w-0">
+                    <Countdown targetDate="2025-11-17" />
+                  </div>
                 </div>
-              </div>
-            )
-          ) : (
-            <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-              <Image src="/assets/logo_interno.png" alt="Club Seminario" className="h-14 w-14 object-contain" width={56} height={56} />
-              <div className="hidden md:block">
-                <h1 className="text-secondary font-bold text-xl leading-tight">INTERNO BORDO</h1>
-                <p className="text-secondary/80 text-xs">Club Seminario</p>
-              </div>
-            </Link>
-          )}
-          
-          {/* Espacio invisible para mantener botones a la derecha cuando no hay texto */}
-          {isHome && !isScrolled && <div className="flex-1" />}
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.path;
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                    isActive
-                      ? 'bg-secondary text-primary'
-                      : 'text-secondary hover:bg-secondary/10'
-                  }`}
-                >
-                  {item.name}
+              )
+            ) : (
+              isScrolled && (
+                <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                  <Image src="/assets/logo_interno.png" alt="Club Seminario" className="h-14 w-14 object-contain" width={56} height={56} />
+                  <div className="hidden md:block">
+                    <h1 className="text-secondary font-bold text-xl leading-tight">INTERNO BORDO</h1>
+                    <p className="text-secondary/80 text-xs">Club Seminario</p>
+                  </div>
                 </Link>
-              );
-            })}
+              )
+            )}
+            
+            {/* Espacio invisible para mantener botones a la derecha cuando no hay texto */}
+            {!isScrolled && <div className="flex-1" />}
+
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => {
+                const isActive = pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    href={item.path}
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                      isActive
+                        ? 'bg-secondary text-primary'
+                        : 'text-secondary hover:bg-secondary/10'
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                );
+              })}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden text-secondary hover:bg-secondary/10"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden text-secondary hover:bg-secondary/10"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
         </div>
+      </nav>
 
-        {/* Mobile Navigation */}
-        {isOpen && (
-          <>
-            <div 
-              className="fixed inset-0 bg-primary/80 backdrop-blur-sm z-40 md:hidden"
-              onClick={() => setIsOpen(false)}
-            />
-            <div className="md:hidden pb-4 animate-fade-in relative z-50 -mt-16 pt-6">
+      {/* Mobile Navigation - Fuera del nav para que el fondo se vea en todas las páginas */}
+      {isOpen && (
+        <>
+          <div 
+            className="fixed inset-0 z-[100] md:hidden"
+            onClick={() => setIsOpen(false)}
+            style={{ 
+              backgroundColor: 'hsl(343, 64%, 25%, 0.95)',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)'
+            }}
+          />
+          <div className="fixed top-0 left-0 right-0 z-[101] md:hidden">
+            <div className="container mx-auto px-4 pt-6 pb-4 animate-fade-in">
               <div className="flex items-center justify-between mb-4 px-2">
                 <h2 className="text-secondary font-bold text-lg">Menú</h2>
                 <Button
@@ -142,10 +150,10 @@ const NavBar = () => {
                 })}
               </div>
             </div>
-          </>
-        )}
-      </div>
-    </nav>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 

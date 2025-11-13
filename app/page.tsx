@@ -710,7 +710,7 @@ export default function HomePage() {
       </div>
 
       {/* ¿Quién Toma Más? */}
-      <section className="container mx-auto px-4 mb-16 md:mb-24">
+      <section className="container mx-auto px-4 mb-16 md:mb-24 hidden">
         {/* Header */}
         <div className="text-center mb-10 md:mb-20">
           <div className="inline-flex items-center gap-3 mb-3">

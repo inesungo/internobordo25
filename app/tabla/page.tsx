@@ -50,24 +50,24 @@ export default function TablaPage() {
         title="Tabla de Posiciones"
         subtitle="Consulta las posiciones generales y por serie"
         imageSrc="/assets/posiciones.jpeg"
-        icon={<Trophy className="h-12 w-12 sm:h-16 sm:w-16 md:h-20 md:w-20 text-secondary drop-shadow-lg" />}
+        
       />
 
-      <div className="container mx-auto px-4 py-8 sm:py-12">
+      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12">
 
         <Tabs defaultValue="Masculino" className="animate-scale-in">
-          <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
-            <TabsTrigger value="Masculino" onClick={() => setCategory('Masculino')}>
+          <TabsList className="grid w-full max-w-md grid-cols-2 mb-6 md:mb-8 h-9">
+            <TabsTrigger value="Masculino" onClick={() => setCategory('Masculino')} className="text-sm">
               Masculino
             </TabsTrigger>
-            <TabsTrigger value="Femenino" onClick={() => setCategory('Femenino')}>
+            <TabsTrigger value="Femenino" onClick={() => setCategory('Femenino')} className="text-sm">
               Femenino
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="Masculino" className="space-y-6">
-            {grupos.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <TabsContent value="Masculino" className="space-y-4 md:space-y-6">
+            {grupos.length > 0 && data && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 {grupos.map((grupo) => {
                   const standingsGrupo = buildStandings(
                     data.equipos,
@@ -78,10 +78,10 @@ export default function TablaPage() {
                   );
                   return (
                     <Card key={grupo}>
-                      <CardHeader>
-                        <CardTitle className="text-xl text-primary">Grupo {grupo}</CardTitle>
+                      <CardHeader className="pb-3 md:pb-6">
+                        <CardTitle className="text-lg md:text-xl text-primary">Grupo {grupo}</CardTitle>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className="p-3 md:p-6">
                         <TablaPosiciones standings={standingsGrupo} />
                       </CardContent>
                     </Card>
@@ -91,12 +91,12 @@ export default function TablaPage() {
             )}
           </TabsContent>
 
-          <TabsContent value="Femenino" className="space-y-6">
+          <TabsContent value="Femenino" className="space-y-4 md:space-y-6">
             <Card>
-              <CardHeader>
-                <CardTitle className="text-xl text-primary">Tabla General</CardTitle>
+              <CardHeader className="pb-3 md:pb-6">
+                <CardTitle className="text-lg md:text-xl text-primary">Tabla General</CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-3 md:p-6">
                 <TablaPosiciones standings={standingsGeneral} />
               </CardContent>
             </Card>

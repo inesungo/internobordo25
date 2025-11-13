@@ -8,9 +8,10 @@ interface ListaPartidosProps {
   equipos: Equipo[];
   categoria?: 'Masculino' | 'Femenino';
   estadoFiltro?: 'todos' | 'proximos' | 'finalizados';
+  equiposSeleccionados?: string[];
 }
 
-export default function ListaPartidos({ partidos, resultados, equipos, categoria, estadoFiltro = 'todos' }: ListaPartidosProps) {
+export default function ListaPartidos({ partidos, resultados, equipos, categoria, estadoFiltro = 'todos', equiposSeleccionados = [] }: ListaPartidosProps) {
   // Filtrar por categoría si se especifica
   let partidosFiltrados = partidos;
   if (categoria) {
@@ -24,6 +25,13 @@ export default function ListaPartidos({ partidos, resultados, equipos, categoria
     partidosFiltrados = partidosFiltrados.filter((p) => resultados.find((r) => r.partido_id === p.id));
   }
 
+  // Filtrar por equipos seleccionados
+  if (equiposSeleccionados.length > 0) {
+    partidosFiltrados = partidosFiltrados.filter((p) => {
+      return equiposSeleccionados.includes(p.local_id) || equiposSeleccionados.includes(p.visitante_id);
+    });
+  }
+
   const partidosOrdenados = [...partidosFiltrados].sort((a, b) => {
     const dateA = dayjs(`${a.fecha} ${a.hora}`);
     const dateB = dayjs(`${b.fecha} ${b.hora}`);
@@ -31,7 +39,7 @@ export default function ListaPartidos({ partidos, resultados, equipos, categoria
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {partidosOrdenados.map((partido) => {
         const local = equipos.find((e) => e.id === partido.local_id);
         const visitante = equipos.find((e) => e.id === partido.visitante_id);

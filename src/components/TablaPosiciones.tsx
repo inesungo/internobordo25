@@ -14,35 +14,33 @@ interface TablaPosicionesProps {
 
 export default function TablaPosiciones({ standings }: TablaPosicionesProps) {
   return (
-    <div className="overflow-x-auto">
-      <Table>
+    <div className="overflow-x-auto -mx-3 md:mx-0">
+      <Table className="min-w-full">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-16">Pos</TableHead>
-            <TableHead>Equipo</TableHead>
-            <TableHead className="text-center">PJ</TableHead>
-            <TableHead className="text-center">PG</TableHead>
-            <TableHead className="text-center">PE</TableHead>
-            <TableHead className="text-center">PP</TableHead>
-            <TableHead className="text-center">GF</TableHead>
-            <TableHead className="text-center">GC</TableHead>
-            <TableHead className="text-center">DG</TableHead>
-            <TableHead className="text-center font-bold">PTS</TableHead>
+            <TableHead className="w-10 md:w-16 text-xs md:text-sm py-2 md:py-3">Pos</TableHead>
+            <TableHead className="text-xs md:text-sm py-2 md:py-3">Equipo</TableHead>
+            <TableHead className="text-center text-xs md:text-sm py-2 md:py-3">PJ</TableHead>
+            <TableHead className="text-center text-xs md:text-sm py-2 md:py-3">PG</TableHead>
+            <TableHead className="text-center text-xs md:text-sm py-2 md:py-3">PE</TableHead>
+            <TableHead className="text-center text-xs md:text-sm py-2 md:py-3">PP</TableHead>
+            <TableHead className="text-center text-xs md:text-sm py-2 md:py-3">GF</TableHead>
+            <TableHead className="text-center text-xs md:text-sm py-2 md:py-3">GC</TableHead>
+            <TableHead className="text-center font-bold text-xs md:text-sm py-2 md:py-3">PTS</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {standings.map((team, index) => (
             <TableRow key={team.equipo_id} className="hover:bg-muted/50">
-              <TableCell className="font-bold text-primary">{index + 1}</TableCell>
-              <TableCell className="font-semibold">{team.nombre}</TableCell>
-              <TableCell className="text-center">{team.PJ}</TableCell>
-              <TableCell className="text-center">{team.PG}</TableCell>
-              <TableCell className="text-center">{team.PE}</TableCell>
-              <TableCell className="text-center">{team.PP}</TableCell>
-              <TableCell className="text-center">{team.GF}</TableCell>
-              <TableCell className="text-center">{team.GC}</TableCell>
-              <TableCell className="text-center">{team.DG > 0 ? `+${team.DG}` : team.DG}</TableCell>
-              <TableCell className="text-center font-bold text-primary">{team.Pts}</TableCell>
+              <TableCell className="font-bold text-primary text-xs md:text-sm py-2 md:py-3">{index + 1}</TableCell>
+              <TableCell className="font-semibold text-xs md:text-sm py-2 md:py-3">{team.nombre}</TableCell>
+              <TableCell className="text-center text-xs md:text-sm py-2 md:py-3">{team.PJ}</TableCell>
+              <TableCell className="text-center text-xs md:text-sm py-2 md:py-3">{team.PG}</TableCell>
+              <TableCell className="text-center text-xs md:text-sm py-2 md:py-3">{team.PE}</TableCell>
+              <TableCell className="text-center text-xs md:text-sm py-2 md:py-3">{team.PP}</TableCell>
+              <TableCell className="text-center text-xs md:text-sm py-2 md:py-3">{team.GF}</TableCell>
+              <TableCell className="text-center text-xs md:text-sm py-2 md:py-3">{team.GC}</TableCell>
+              <TableCell className="text-center font-bold text-primary text-xs md:text-sm py-2 md:py-3">{team.Pts}</TableCell>
             </TableRow>
           ))}
         </TableBody>
