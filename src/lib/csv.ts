@@ -10,9 +10,13 @@ export async function fetchCSV<T>(url: string): Promise<T[]> {
   }
 
   try {
-    const response = await fetch(url, {
-      next: { revalidate: 120 },
-    });
+    // next: { revalidate } solo funciona en Server Components/API Routes
+    // En Client Components, usamos fetch normal con cache
+    const fetchOptions: RequestInit = typeof window === 'undefined' 
+      ? { next: { revalidate: 120 } } // Servidor: usar ISR
+      : { cache: 'no-store' }; // Cliente: no cachear (la API route maneja el cache)
+
+    const response = await fetch(url, fetchOptions);
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);

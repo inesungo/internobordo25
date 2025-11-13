@@ -6,20 +6,26 @@ import NavBar from '@/components/NavBar';
 import SectionHero from '@/components/SectionHero';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { getData } from '@/lib/data';
 import { buildStandings } from '@/lib/standings';
 import TablaPosiciones from '@/components/TablaPosiciones';
+import type { TournamentData } from '@/lib/data';
 
 export default function TablaPage() {
   const [category, setCategory] = useState<'Masculino' | 'Femenino'>('Masculino');
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<TournamentData | null>(null);
   const [standingsGeneral, setStandingsGeneral] = useState<any[]>([]);
   const [grupos, setGrupos] = useState<string[]>([]);
 
   useEffect(() => {
     async function loadData() {
-      const tournamentData = await getData();
-      setData(tournamentData);
+      try {
+        const response = await fetch('/api/data');
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        const tournamentData: TournamentData = await response.json();
+        setData(tournamentData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
     }
     loadData();
   }, []);

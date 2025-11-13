@@ -16,9 +16,9 @@ import {
 import Autoplay from 'embla-carousel-autoplay';
 import NavBar from '@/components/NavBar';
 import MatchCard from '@/components/MatchCard';
-import { getData } from '@/lib/data';
 import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import type { TournamentData } from '@/lib/data';
 
 export default function HomePage() {
   const [upcomingMatches, setUpcomingMatches] = useState<any[]>([]);
@@ -27,21 +27,32 @@ export default function HomePage() {
     masculino: { jugador: string; equipo: string; goles: number } | null;
     femenino: { jugador: string; equipo: string; goles: number } | null;
   }>({ masculino: null, femenino: null });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
     
     async function loadData() {
       try {
-        const data = await getData();
+        setLoading(true);
+        setError(null);
+        
+        // Llamar a la API route en lugar de getData directo
+        const response = await fetch('/api/data');
+        
+        if (!response.ok) {
+          throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const data: TournamentData = await response.json();
         
         if (!mounted) return;
         
-        console.log('Datos cargados:', {
+        console.log('📊 Datos cargados desde API:', {
           equipos: data.equipos.length,
           partidos: data.partidos.length,
           jugadores: data.jugadores?.length || 0,
-          jugadoresData: data.jugadores,
         });
         
         setStats({
@@ -74,24 +85,7 @@ export default function HomePage() {
         });
 
         if (mounted) {
-          setUpcomingMatches(matches.length > 0 ? matches : [
-            {
-              homeTeam: 'Los Tigres',
-              awayTeam: 'Las Águilas',
-              date: '15 Nov',
-              time: '16:00',
-              category: 'Masculino' as const,
-              status: 'Próximo' as const,
-            },
-            {
-              homeTeam: 'Las Leonas',
-              awayTeam: 'Las Panteras',
-              date: '15 Nov',
-              time: '18:00',
-              category: 'Femenino' as const,
-              status: 'Próximo' as const,
-            },
-          ]);
+          setUpcomingMatches(matches);
 
           // Calcular top goleadores por categoría
           const getTopGoleador = (categoria: 'Masculino' | 'Femenino') => {
@@ -142,8 +136,16 @@ export default function HomePage() {
             femenino: getTopGoleador('Femenino'),
           });
         }
+        
+        if (mounted) {
+          setLoading(false);
+        }
       } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('❌ Error loading data:', error);
+        if (mounted) {
+          setError(error instanceof Error ? error.message : 'Error desconocido');
+          setLoading(false);
+        }
       }
     }
     

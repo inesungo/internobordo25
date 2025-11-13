@@ -13,17 +13,23 @@ import {
 } from '@/components/ui/accordion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { getData } from '@/lib/data';
 import Image from 'next/image';
+import type { TournamentData } from '@/lib/data';
 
 export default function EquiposPage() {
   const [category, setCategory] = useState<'Masculino' | 'Femenino'>('Masculino');
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<TournamentData | null>(null);
 
   useEffect(() => {
     async function loadData() {
-      const tournamentData = await getData();
-      setData(tournamentData);
+      try {
+        const response = await fetch('/api/data');
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        const tournamentData: TournamentData = await response.json();
+        setData(tournamentData);
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
     }
     loadData();
   }, []);
