@@ -357,13 +357,23 @@ export default function HomePage() {
                 { icon: Users, label: 'JUGADORES', value: animatedStats.jugadores || 0, suffix: '', href: '/equipos' },
               ].map((stat, index) => (
                 <Link key={index} href={stat.href} className="block text-center relative">
-                  {index > 0 && (
-                    <div className="absolute left-0 top-1 bottom-1 w-[0.09375rem] bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
+                  {index < 2 && (
+                    <div className="absolute -right-1 md:-right-2 top-0 bottom-0 w-[1px] flex items-center justify-center">
+                      <div className="h-3/4 w-[0.09375rem] bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
+                    </div>
                   )}
                   <div className="flex flex-col items-center justify-center">
                     <stat.icon className="hidden md:block h-6 w-6 md:h-8 md:w-8 text-secondary mb-2 md:mb-3" />
-                    <p className="text-2xl md:text-4xl font-bold text-primary mb-1">
-                      {typeof stat.value === 'number' ? stat.value.toLocaleString() : stat.value}
+                    <p className={`font-bold text-primary mb-1 leading-tight min-h-[2rem] md:min-h-[3rem] flex items-center justify-center text-center w-full ${
+                      stat.label === 'PARTIDOS' && stat.value === 0 
+                        ? 'text-[0.625rem] md:text-sm' 
+                        : 'text-2xl md:text-4xl'
+                    }`}>
+                      {stat.label === 'PARTIDOS' && stat.value === 0 
+                        ? 'proximamente' 
+                        : typeof stat.value === 'number' 
+                          ? stat.value.toLocaleString() 
+                          : stat.value}
                       {stat.suffix || ''}
                     </p>
                     <p className="text-xs md:text-sm text-primary font-semibold uppercase">{stat.label}</p>
