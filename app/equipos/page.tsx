@@ -21,6 +21,7 @@ export default function EquiposPage() {
   const [category, setCategory] = useState<'Masculino' | 'Femenino'>('Masculino');
   const [data, setData] = useState<TournamentData | null>(null);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let mounted = true;
@@ -81,6 +82,41 @@ export default function EquiposPage() {
       .map((n) => n[0])
       .join('')
       .toUpperCase();
+  };
+
+  // Función para obtener la ruta del escudo del equipo
+  const getEscudoUrl = (equipo: any): string | null => {
+    // Si hay escudo_url definido
+    if (equipo.escudo_url) {
+      const escudoUrl = equipo.escudo_url.trim();
+      
+      // Si es una URL externa (http/https), usarla directamente
+      if (escudoUrl.startsWith('http://') || escudoUrl.startsWith('https://')) {
+        return escudoUrl;
+      }
+      
+      // Si es un nombre de archivo local, construir la ruta
+      if (escudoUrl) {
+        // Asegurar que empiece con /assets/escudos/
+        if (escudoUrl.startsWith('/')) {
+          return escudoUrl;
+        }
+        return `/assets/escudos/${escudoUrl}`;
+      }
+    }
+    
+    // Si no hay escudo_url, intentar buscar automáticamente por nombre del equipo
+    // Normalizar el nombre: quitar acentos, espacios, convertir a minúsculas
+    const nombreNormalizado = equipo.nombre
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Quitar acentos
+      .replace(/\s+/g, '-') // Reemplazar espacios con guiones
+      .replace(/[^a-z0-9-]/g, ''); // Quitar caracteres especiales
+    
+    // Intentar con PNG primero (formato más común para escudos)
+    // Si no existe, el onError mostrará el ícono por defecto
+    return `/assets/escudos/${nombreNormalizado}.png`;
   };
 
   if (!data) {
@@ -160,14 +196,20 @@ export default function EquiposPage() {
                     >
                       <AccordionTrigger className="hover:no-underline px-6 py-6 bg-gradient-to-r from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/15 transition-all">
                         <div className="flex items-center gap-4 flex-1">
-                          {equipo.escudo_url ? (
-                            <Image
-                              src={equipo.escudo_url}
-                              alt={equipo.nombre}
-                              width={60}
-                              height={60}
-                              className="object-contain"
-                            />
+                          {getEscudoUrl(equipo) && !failedImages.has(equipo.id) ? (
+                            <div className="relative w-[60px] h-[60px] flex items-center justify-center">
+                              <Image
+                                src={getEscudoUrl(equipo)!}
+                                alt={`Escudo de ${equipo.nombre}`}
+                                width={60}
+                                height={60}
+                                className="object-contain"
+                                onError={() => {
+                                  // Marcar esta imagen como fallida
+                                  setFailedImages(prev => new Set(prev).add(equipo.id));
+                                }}
+                              />
+                            </div>
                           ) : (
                             <div className="bg-gradient-to-br from-primary to-accent p-3 rounded-lg">
                               <Users className="h-6 w-6 text-secondary" />
@@ -230,14 +272,20 @@ export default function EquiposPage() {
                     >
                       <AccordionTrigger className="hover:no-underline px-6 py-6 bg-gradient-to-r from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/15 transition-all">
                         <div className="flex items-center gap-4 flex-1">
-                          {equipo.escudo_url ? (
-                            <Image
-                              src={equipo.escudo_url}
-                              alt={equipo.nombre}
-                              width={60}
-                              height={60}
-                              className="object-contain"
-                            />
+                          {getEscudoUrl(equipo) && !failedImages.has(equipo.id) ? (
+                            <div className="relative w-[60px] h-[60px] flex items-center justify-center">
+                              <Image
+                                src={getEscudoUrl(equipo)!}
+                                alt={`Escudo de ${equipo.nombre}`}
+                                width={60}
+                                height={60}
+                                className="object-contain"
+                                onError={() => {
+                                  // Marcar esta imagen como fallida
+                                  setFailedImages(prev => new Set(prev).add(equipo.id));
+                                }}
+                              />
+                            </div>
                           ) : (
                             <div className="bg-gradient-to-br from-primary to-accent p-3 rounded-lg">
                               <Users className="h-6 w-6 text-secondary" />
