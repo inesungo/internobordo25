@@ -4,30 +4,46 @@ import { useState, useEffect } from 'react';
 import NavBar from '@/components/NavBar';
 import SectionHero from '@/components/SectionHero';
 import { Card, CardContent } from '@/components/ui/card';
-import { Camera, X, ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { Camera, X, ChevronLeft, ChevronRight, Download, ExternalLink } from 'lucide-react';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
-interface GaleriaImagen {
-  url: string;
-  titulo?: string;
+interface FechaGaleria {
+  id: string;
+  nombre: string;
+  imagenes: string[];
+  linkGoogleDrive: string;
 }
 
-// Array de imágenes de la galería
-// Agrega tus URLs aquí:
-const galeriaImagenes: GaleriaImagen[] = [
-  { url: '/assets/foto1.jpeg' },
-  { url: '/assets/foto2.jpeg' },
-  { url: '/assets/foto3.jpeg' },
-  // Agrega más fotos aquí:
-  // { url: 'https://ejemplo.com/imagen.jpg', titulo: 'Título opcional' },
+// Configuración de fechas con sus imágenes y links (orden: más reciente primero)
+const fechas: FechaGaleria[] = [
+  {
+    id: 'fecha2',
+    nombre: 'Fecha 2',
+    imagenes: [
+      '/assets/fotos/fecha2/Fecha 2 IB - 20 hrs-33.jpg',
+      '/assets/fotos/fecha2/Fecha 2 IB - 21 hrs-1.jpg',
+      '/assets/fotos/fecha2/Fecha 2 IB - 22 hrs-26.jpg',
+    ],
+    linkGoogleDrive: 'https://drive.google.com/drive/folders/12rSr3OVq921vdc8_tM8TUa1Rcj1yoG-X',
+  },
+  {
+    id: 'fecha1',
+    nombre: 'Fecha 1',
+    imagenes: [
+      '/assets/fotos/fecha1/Fecha 1 IB - 21 hrs - 43.jpg',
+      '/assets/fotos/fecha1/Fecha 1 IB - 22 hrs - 56.jpg',
+      '/assets/fotos/fecha1/Fecha 1 IB - 22 hrs - 58.jpg',
+    ],
+    linkGoogleDrive: 'https://drive.google.com/drive/folders/1_3lm3xe41b-GReT18BC2TSKDYuEskVKK',
+  },
 ];
 
 export default function GaleriaPage() {
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ fechaId: string; index: number } | null>(null);
 
-  const openLightbox = (index: number) => {
-    setSelectedImage(index);
+  const openLightbox = (fechaId: string, index: number) => {
+    setSelectedImage({ fechaId, index });
   };
 
   const closeLightbox = () => {
@@ -36,45 +52,32 @@ export default function GaleriaPage() {
 
   const navigateImage = (direction: 'prev' | 'next') => {
     if (selectedImage === null) return;
-    
+
+    const fecha = fechas.find(f => f.id === selectedImage.fechaId);
+    if (!fecha) return;
+
     if (direction === 'prev') {
-      setSelectedImage(selectedImage > 0 ? selectedImage - 1 : galeriaImagenes.length - 1);
+      const newIndex = selectedImage.index > 0 ? selectedImage.index - 1 : fecha.imagenes.length - 1;
+      setSelectedImage({ fechaId: selectedImage.fechaId, index: newIndex });
     } else {
-      setSelectedImage(selectedImage < galeriaImagenes.length - 1 ? selectedImage + 1 : 0);
+      const newIndex = selectedImage.index < fecha.imagenes.length - 1 ? selectedImage.index + 1 : 0;
+      setSelectedImage({ fechaId: selectedImage.fechaId, index: newIndex });
     }
   };
 
-  const downloadImage = async (imageUrl: string, index: number, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevenir que se abra el lightbox
+  const downloadImage = async (imageUrl: string, e: React.MouseEvent) => {
+    e.stopPropagation();
     
     try {
-      // Si es una URL de Google Drive, convertirla a formato de descarga
-      let downloadUrl = imageUrl;
-      if (imageUrl.includes('drive.google.com')) {
-        // Extraer el ID si está en formato de visualización
-        const match = imageUrl.match(/[?&]id=([^&]+)/);
-        if (match) {
-          downloadUrl = `https://drive.google.com/uc?export=download&id=${match[1]}`;
-        }
-      }
-
-      // Obtener el nombre del archivo (usar título si existe, sino foto-X)
-      const imagen = galeriaImagenes[index];
-      const nombreArchivo = imagen?.titulo 
-        ? `${imagen.titulo}.jpg` 
-        : `foto-${index + 1}.jpg`;
-
-      // Crear un enlace temporal para descargar
       const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = nombreArchivo;
+      link.href = imageUrl;
+      link.download = imageUrl.split('/').pop() || 'imagen.jpg';
       link.target = '_blank';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
       console.error('Error al descargar la imagen:', error);
-      // Si falla, intentar abrir en nueva pestaña
       window.open(imageUrl, '_blank');
     }
   };
@@ -87,21 +90,13 @@ export default function GaleriaPage() {
       if (e.key === 'Escape') {
         setSelectedImage(null);
       } else if (e.key === 'ArrowLeft') {
-        setSelectedImage((prev) => {
-          if (prev === null) return null;
-          return prev > 0 ? prev - 1 : galeriaImagenes.length - 1;
-        });
+        navigateImage('prev');
       } else if (e.key === 'ArrowRight') {
-        setSelectedImage((prev) => {
-          if (prev === null) return null;
-          return prev < galeriaImagenes.length - 1 ? prev + 1 : 0;
-        });
+        navigateImage('next');
       }
     };
 
-    // Prevenir scroll del body cuando el lightbox está abierto
     document.body.style.overflow = 'hidden';
-    
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
@@ -110,6 +105,17 @@ export default function GaleriaPage() {
     };
   }, [selectedImage]);
 
+  const getCurrentImage = () => {
+    if (selectedImage === null) return null;
+    const fecha = fechas.find(f => f.id === selectedImage.fechaId);
+    return fecha ? fecha.imagenes[selectedImage.index] : null;
+  };
+
+  const getCurrentFecha = () => {
+    if (selectedImage === null) return null;
+    return fechas.find(f => f.id === selectedImage.fechaId);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <NavBar />
@@ -117,62 +123,100 @@ export default function GaleriaPage() {
         title="Galería de Fotos"
         subtitle="Los mejores momentos del torneo capturados para vos"
         imageSrc="/assets/foto1.jpeg"
-        icon={<Camera className="h-8 w-8 sm:h-10 sm:w-10" />}
+        
       />
 
-      <div className="container mx-auto px-4 py-8 sm:py-12">
-        {galeriaImagenes.length === 0 ? (
-          <Card className="bg-white border-2 border-primary/20">
-            <CardContent className="p-8">
-              <div className="flex flex-col items-center justify-center py-12 gap-4">
-                <Camera className="h-16 w-16 text-secondary/50" />
-                <p className="text-muted-foreground text-center text-lg">
-                  No hay fotos disponibles aún
-                </p>
-                <p className="text-muted-foreground/70 text-center text-sm max-w-md">
-                  Agrega las URLs de las imágenes en el array <code className="bg-muted px-2 py-1 rounded text-xs">galeriaImagenes</code> del archivo <code className="bg-muted px-2 py-1 rounded text-xs">app/galeria/page.tsx</code>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 animate-scale-in">
-            {galeriaImagenes.map((imagen, index) => (
-              <Card
-                key={index}
-                className="bg-white border-2 border-primary/20 hover:border-secondary hover:shadow-lg transition-all cursor-pointer overflow-hidden group"
-                onClick={() => openLightbox(index)}
-              >
-                <CardContent className="p-0">
-                  <div className="relative aspect-square w-full overflow-hidden">
-                    <Image
-                      src={imagen.url}
-                      alt={imagen.titulo || `Foto ${index + 1}`}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-300"
-                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-                    {/* Botón de descarga - siempre visible en mobile, aparece en hover en desktop */}
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 bg-white/90 hover:bg-white text-primary opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200 shadow-md h-7 w-7 sm:h-9 sm:w-9 z-10"
-                      onClick={(e) => downloadImage(imagen.url, index, e)}
-                      aria-label="Descargar imagen"
+      <div className="container mx-auto px-4 py-8 sm:py-12 space-y-12 md:space-y-16">
+        {fechas.map((fecha, fechaIndex) => (
+          <div key={fecha.id} className="space-y-6">
+            {/* Título de la fecha con decoración */}
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-secondary/40 to-transparent"></div>
+              <h2 className="text-xl md:text-2xl font-bold text-primary whitespace-nowrap">
+                {fecha.nombre}
+              </h2>
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-secondary/40 to-transparent"></div>
+            </div>
+            
+            {/* Scroll horizontal con indicador */}
+            <div className="relative">
+              <div className="w-full overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-secondary/30 scrollbar-track-transparent">
+                <div className="flex gap-4 md:gap-6 min-w-max px-2 md:px-4">
+                  {/* Imágenes de la fecha */}
+                  {fecha.imagenes.map((imagen, index) => (
+                    <Card
+                      key={index}
+                      className="bg-white border-2 border-primary/20 hover:border-secondary hover:shadow-xl transition-all cursor-pointer overflow-hidden group flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] shadow-md"
+                      onClick={() => openLightbox(fecha.id, index)}
                     >
-                      <Download className="h-4 w-4 sm:h-5 sm:w-5" />
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      <CardContent className="p-0">
+                        <div className="relative aspect-square w-full overflow-hidden">
+                          <Image
+                            src={imagen}
+                            alt={`${fecha.nombre} - Foto ${index + 1}`}
+                            fill
+                            className="object-cover group-hover:scale-110 transition-transform duration-500"
+                            sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, 360px"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          {/* Botón de descarga */}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2 bg-white/95 hover:bg-white text-primary opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-all duration-200 shadow-lg h-8 w-8 sm:h-10 sm:w-10 z-10 hover:scale-110"
+                            onClick={(e) => downloadImage(imagen, e)}
+                            aria-label="Descargar imagen"
+                          >
+                            <Download className="h-4 w-4 sm:h-5 sm:w-5" />
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  {/* Card "Ver más" mejorada */}
+                  <Card className="bg-gradient-to-br from-secondary/5 to-secondary/10 border-2 border-secondary/30 hover:border-secondary hover:shadow-xl transition-all flex-shrink-0 w-[280px] sm:w-[320px] md:w-[360px] shadow-md group">
+                    <CardContent className="p-0 h-full flex items-center justify-center min-h-[280px] sm:min-h-[320px] md:min-h-[360px]">
+                      <a
+                        href={fecha.linkGoogleDrive}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-full h-full flex items-center justify-center p-6"
+                      >
+                        <div className="flex flex-col items-center justify-center gap-4 w-full h-full group-hover:scale-105 transition-transform duration-300">
+                          <div className="bg-secondary/20 rounded-full p-4 group-hover:bg-secondary/30 transition-colors">
+                            <ExternalLink className="h-10 w-10 md:h-12 md:w-12 text-secondary" />
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xl md:text-2xl font-bold text-secondary mb-1">
+                              Ver Más
+                            </p>
+                            <p className="text-sm text-secondary/70">
+                              Fotos en Google Drive
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+              {/* Indicador de scroll sutil */}
+              <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-gradient-to-l from-background via-background/80 to-transparent w-12 h-full pointer-events-none hidden md:block"></div>
+            </div>
+
+            {/* Separador entre fechas (excepto en la última) */}
+            {fechaIndex < fechas.length - 1 && (
+              <div className="flex items-center justify-center my-10 md:my-12">
+                <div className="h-px w-full max-w-2xl bg-gradient-to-r from-transparent via-primary/20 via-primary/30 via-primary/20 to-transparent"></div>
+              </div>
+            )}
           </div>
-        )}
+        ))}
       </div>
 
       {/* Lightbox */}
-      {selectedImage !== null && (
+      {selectedImage !== null && getCurrentImage() && (
         <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 animate-fade-in"
           onClick={closeLightbox}
@@ -194,7 +238,7 @@ export default function GaleriaPage() {
             <X className="h-6 w-6" />
           </Button>
 
-          {galeriaImagenes.length > 1 && (
+          {getCurrentFecha() && getCurrentFecha()!.imagenes.length > 1 && (
             <>
               <Button
                 variant="ghost"
@@ -226,8 +270,8 @@ export default function GaleriaPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <Image
-              src={galeriaImagenes[selectedImage].url}
-              alt={galeriaImagenes[selectedImage].titulo || `Foto ${selectedImage + 1}`}
+              src={getCurrentImage()!}
+              alt={`Foto ${selectedImage.index + 1}`}
               width={1200}
               height={800}
               className="object-contain max-w-full max-h-full rounded-lg"
@@ -235,9 +279,9 @@ export default function GaleriaPage() {
             />
           </div>
 
-          {galeriaImagenes.length > 1 && (
+          {getCurrentFecha() && getCurrentFecha()!.imagenes.length > 1 && (
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm">
-              {selectedImage + 1} / {galeriaImagenes.length}
+              {selectedImage.index + 1} / {getCurrentFecha()!.imagenes.length}
             </div>
           )}
         </div>
@@ -245,4 +289,3 @@ export default function GaleriaPage() {
     </div>
   );
 }
-

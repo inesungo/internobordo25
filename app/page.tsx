@@ -295,32 +295,39 @@ export default function HomePage() {
               </div>
             </CarouselItem>
 
-            {/* Slide 2: Fotos - Oculto temporalmente hasta que haya fotos */}
-            {/* <CarouselItem>
+            {/* Slide 2: Fotos */}
+            <CarouselItem>
               <div 
-                className="relative h-screen flex items-center justify-center overflow-hidden bg-cover bg-center"
+                className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden bg-cover bg-center"
                 style={{ backgroundImage: 'url(/assets/foto1.jpeg)' }}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/70 to-accent/60" />
                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMC41IiBvcGFjaXR5PSIwLjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-10" />
                 
-                <div className="relative z-10 text-center px-4 animate-fade-in">
-                  <Camera className="h-24 w-24 text-secondary mx-auto mb-6 drop-shadow-lg" />
-                  <h2 className="text-4xl md:text-6xl font-bold text-secondary mb-4 drop-shadow-lg">
+                <div className="relative z-30 text-center px-12 sm:px-16 md:px-4 animate-fade-in mb-8 md:mb-16">
+                  <div className="mb-2 md:mb-4 flex justify-center">
+                    <Camera className="h-12 w-12 md:h-16 md:w-16 text-white drop-shadow-lg" />
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-1 sm:mb-2 drop-shadow-lg">
                     ¡NO TE PIERDAS LAS FOTOS!
                   </h2>
-                  <p className="text-xl md:text-2xl text-secondary/90 mb-8 max-w-2xl mx-auto">
+                  <p className="text-sm sm:text-base md:text-lg text-white/90 mb-4 md:mb-6 max-w-2xl mx-auto drop-shadow-md">
                     Los mejores momentos del torneo capturados para vos
                   </p>
-                  <Button
-                    size="lg"
-                    className="bg-secondary text-primary hover:bg-secondary/90 font-bold text-lg px-8"
-                  >
-                    Ver Galería
-                  </Button>
+                  <div className="flex flex-col md:flex-row gap-2 md:gap-4 justify-center items-center">
+                    <Link href="/galeria" className="w-full md:w-auto max-w-[17.5rem] md:max-w-none">
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        className="w-full md:min-w-[13.75rem] border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 hover:text-white font-bold text-xs md:text-lg px-3 md:px-8 py-1.5 md:py-3"
+                      >
+                        Ver Galería
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </CarouselItem> */}
+            </CarouselItem>
 
             {/* Slide 3: Redes Sociales */}
             <CarouselItem>
