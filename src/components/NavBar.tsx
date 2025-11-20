@@ -34,6 +34,7 @@ const NavBar = () => {
     { name: 'Posiciones', path: '/tabla' },
     { name: 'Estadísticas', path: '/estadisticas' },
     { name: 'Equipos', path: '/equipos' },
+    { name: 'Galería', path: '/galeria', hidden: true },
     { name: '¿Quién Toma Más?', path: '/quien-toma-mas', hidden: true },
   ].filter(item => !item.hidden);
 
