@@ -221,11 +221,21 @@ export default function HomePage() {
     imageStyle?: React.CSSProperties;
   };
 
+  // Versión para forzar recarga de imágenes (cambiar este número cuando actualices los sponsors)
+  const SPONSORS_VERSION = '2.0';
+
   const sponsors: Sponsor[] = [
-    { image: '/assets/sponsor1.png', height: 'h-20 sm:h-28 md:h-24' }, // Más grande
-    { image: '/assets/sponsor2.png', height: 'h-10 sm:h-12 md:h-12', padding: 'pt-4 sm:pt-5 md:pt-4 pb-1 sm:pb-2 md:pb-1' }, // Más chico y centrado con menos padding arriba
-    { image: '/assets/sponsor3.png', height: 'h-20 sm:h-28 md:h-24' }, // Más grande
-    { image: '/assets/sponsor4.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande, convertido a negro
+    { image: '/assets/sponsor1.png', height: 'h-16 sm:h-20 md:h-20', imageStyle: { filter: 'brightness(0)' } }, // Más chico
+    { image: '/assets/sponsor2.png', height: 'h-12 sm:h-14 md:h-14', padding: 'pt-4 sm:pt-5 md:pt-4 pb-1 sm:pb-2 md:pb-1', imageStyle: { filter: 'brightness(0)' } }, // Un poco más grande
+    { image: '/assets/sponsor3.png', height: 'h-20 sm:h-28 md:h-24', imageStyle: { filter: 'brightness(0)' } },
+    { image: '/assets/sponsor4.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } },
+    { image: '/assets/sponsor5.png', height: 'h-16 sm:h-20 md:h-20', imageStyle: { filter: 'brightness(0)' } }, // Un poquito más chico
+    { image: '/assets/sponsor6.png', height: 'h-20 sm:h-28 md:h-24', imageStyle: { filter: 'brightness(0)' } },
+    { image: '/assets/sponsor7.png', height: 'h-16 sm:h-20 md:h-20', imageStyle: { filter: 'brightness(0)' } }, // Más chico
+    { image: '/assets/sponsor8.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
+    { image: '/assets/sponsor9.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
+    { image: '/assets/sponsor10png.png', height: 'h-16 sm:h-20 md:h-20', imageStyle: { filter: 'brightness(0)' } }, // Más chico
+    { image: '/assets/sponsor11.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
   ];
 
   return (
@@ -1023,7 +1033,7 @@ export default function HomePage() {
                       <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
                         <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
                           <Image
-                            src={sponsor.image}
+                            src={`${sponsor.image}?v=${SPONSORS_VERSION}`}
                             alt={`Sponsor ${index + 1}`}
                             width={200}
                             height={80}
@@ -1042,26 +1052,40 @@ export default function HomePage() {
           </Carousel>
         </div>
 
-        {/* Desktop: Grid */}
-        <div className="hidden md:grid md:grid-cols-4 gap-2">
-          {sponsors.map((sponsor, index) => (
-            <Card key={index} className="hover:shadow-lg transition-all bg-white h-full">
+        {/* Desktop: Carrusel */}
+        <div className="hidden md:block">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: false,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="-ml-2 md:-ml-4">
+              {sponsors.map((sponsor, index) => (
+                <CarouselItem key={index} className="pl-2 md:pl-4 basis-[25%] lg:basis-[20%]">
+                  <Card className="hover:shadow-lg transition-all bg-white h-full">
                     <CardContent className="p-2 flex items-center justify-center h-[5rem]">
-                <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
-                  <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
-                    <Image
-                      src={sponsor.image}
-                      alt={`Sponsor ${index + 1}`}
-                      width={200}
-                      height={80}
-                      className={`object-contain w-full h-full ${sponsor.imageClass || ''}`}
-                      style={{ maxWidth: '100%', maxHeight: '100%', ...sponsor.imageStyle }}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                      <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
+                        <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
+                          <Image
+                            src={`${sponsor.image}?v=${SPONSORS_VERSION}`}
+                            alt={`Sponsor ${index + 1}`}
+                            width={200}
+                            height={80}
+                            className={`object-contain w-full h-full ${sponsor.imageClass || ''}`}
+                            style={{ maxWidth: '100%', maxHeight: '100%', ...sponsor.imageStyle }}
+                          />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-0" />
+            <CarouselNext className="right-0" />
+          </Carousel>
         </div>
       </section>
 
