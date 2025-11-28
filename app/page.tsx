@@ -263,28 +263,31 @@ export default function HomePage() {
     <div className="min-h-screen relative">
       {/* Popup Promocional */}
       <Dialog open={showPromoPopup} onOpenChange={handleClosePromoPopup}>
-        <DialogContent className="max-w-2xl w-[95%] p-0 bg-transparent border-0 shadow-none">
+        <DialogContent className="max-w-2xl w-[95%] sm:w-[90%] max-h-[95vh] p-0 bg-transparent border-0 shadow-none overflow-hidden">
           <DialogTitle className="sr-only">Promoción</DialogTitle>
-          <div className="relative">
-            <img
-              src="/assets/fiesta1.png"
-              alt="Promoción"
-              className="w-full h-auto rounded-lg"
-              onError={(e) => {
-                // Si la imagen no existe, mostrar un placeholder
-                e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23ddd" width="800" height="600"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImagen promocional%3C/text%3E%3C/svg%3E';
-              }}
-            />
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-              <Button
-                onClick={() => {
-                  window.open('https://www.instagram.com/internobordo?igsh=YXp0N2F0ZWszMTU0', '_blank');
-                  handleClosePromoPopup();
+          <div className="relative w-full">
+            <div className="relative w-full rounded-lg overflow-hidden">
+              <img
+                src="/assets/fiesta1.png"
+                alt="Promoción"
+                className="w-full h-auto block"
+                style={{ maxHeight: '85vh', objectFit: 'contain' }}
+                onError={(e) => {
+                  // Si la imagen no existe, mostrar un placeholder
+                  e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23ddd" width="800" height="600"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImagen promocional%3C/text%3E%3C/svg%3E';
                 }}
-                className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium shadow-lg"
-              >
-                Comprar acá
-              </Button>
+              />
+              <div className="absolute bottom-3 sm:bottom-4 left-0 right-0 flex justify-center px-3 sm:px-4">
+                <Button
+                  onClick={() => {
+                    window.open('https://www.instagram.com/internobordo?igsh=YXp0N2F0ZWszMTU0', '_blank');
+                    handleClosePromoPopup();
+                  }}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 sm:px-6 py-2 sm:py-2.5 rounded-md font-medium shadow-lg text-sm sm:text-base whitespace-nowrap"
+                >
+                  Comprar acá
+                </Button>
+              </div>
             </div>
           </div>
         </DialogContent>
