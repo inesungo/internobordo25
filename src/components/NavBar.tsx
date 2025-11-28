@@ -32,6 +32,7 @@ const NavBar = () => {
     { name: 'Inicio', path: '/' },
     { name: 'Fixture', path: '/fixture' },
     { name: 'Posiciones', path: '/tabla' },
+    { name: 'Playoffs', path: '/playoffs' },
     { name: 'Estadísticas', path: '/estadisticas' },
     { name: 'Equipos', path: '/equipos' },
     { name: 'Galería', path: '/galeria' },

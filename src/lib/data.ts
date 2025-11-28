@@ -1,5 +1,5 @@
 import { fetchCSV } from './csv';
-import { Equipo, Partido, Resultado, Goleador, Valla, Jugador } from './types';
+import { Equipo, Partido, Resultado, Goleador, Valla, Jugador, PartidoPlayoff, ResultadoPlayoff } from './types';
 
 export interface TournamentData {
   equipos: Equipo[];
@@ -8,6 +8,8 @@ export interface TournamentData {
   goleadores: Goleador[];
   vallas: Valla[];
   jugadores: Jugador[];
+  partidosPlayoff: PartidoPlayoff[];
+  resultadosPlayoff: ResultadoPlayoff[];
 }
 
 /**
@@ -21,6 +23,8 @@ export async function getData(): Promise<TournamentData> {
   const goleadoresUrl = process.env.NEXT_PUBLIC_CSV_GOLEADORES || '';
   const vallasUrl = process.env.NEXT_PUBLIC_CSV_VALLAS || '';
   const jugadoresUrl = process.env.NEXT_PUBLIC_CSV_JUGADORES || '';
+  const playoffsUrl = process.env.NEXT_PUBLIC_CSV_PLAYOFFS || '';
+  const resultadosPlayoffsUrl = process.env.NEXT_PUBLIC_CSV_RESULTADOS_PLAYOFFS || '';
 
   // En desarrollo, usar datos mock si no hay URLs
   if (process.env.NODE_ENV === 'development' && 
@@ -29,13 +33,15 @@ export async function getData(): Promise<TournamentData> {
   }
 
   // Cargar todos los CSVs en paralelo
-  const [equipos, partidos, resultados, goleadores, vallas, jugadoresRaw] = await Promise.all([
+  const [equipos, partidos, resultados, goleadores, vallas, jugadoresRaw, partidosPlayoff, resultadosPlayoff] = await Promise.all([
     fetchCSV<Equipo>(equiposUrl),
     fetchCSV<Partido>(partidosUrl),
     fetchCSV<Resultado>(resultadosUrl),
     fetchCSV<Goleador>(goleadoresUrl),
     fetchCSV<Valla>(vallasUrl),
     fetchCSV<any>(jugadoresUrl),
+    playoffsUrl ? fetchCSV<PartidoPlayoff>(playoffsUrl) : Promise.resolve([]),
+    resultadosPlayoffsUrl ? fetchCSV<ResultadoPlayoff>(resultadosPlayoffsUrl) : Promise.resolve([]),
   ]);
 
   // Transformar formato ancho del CSV de jugadores a formato de filas individuales
@@ -107,6 +113,8 @@ export async function getData(): Promise<TournamentData> {
       goleadores: goleadoresUrl ? '✓' : '✗',
       vallas: vallasUrl ? '✓' : '✗',
       jugadores: jugadoresUrl ? '✓' : '✗',
+      playoffs: playoffsUrl ? '✓' : '✗',
+      resultadosPlayoffs: resultadosPlayoffsUrl ? '✓' : '✗',
     });
     console.log('Datos cargados:', {
       equipos: equipos.length,
@@ -115,6 +123,8 @@ export async function getData(): Promise<TournamentData> {
       goleadores: goleadores.length,
       vallas: vallas.length,
       jugadores: jugadores.length,
+      partidosPlayoff: partidosPlayoff.length,
+      resultadosPlayoff: resultadosPlayoff.length,
     });
   }
 
@@ -125,6 +135,8 @@ export async function getData(): Promise<TournamentData> {
     goleadores,
     vallas,
     jugadores,
+    partidosPlayoff: partidosPlayoff || [],
+    resultadosPlayoff: resultadosPlayoff || [],
   };
 }
 
@@ -180,6 +192,21 @@ function getMockData(): TournamentData {
       { id: '1', nombre: 'Juan', apellido: 'Pérez', equipo_id: '1' },
       { id: '2', nombre: 'Carlos', apellido: 'López', equipo_id: '2' },
     ],
+    partidosPlayoff: [
+      {
+        id: 'p1',
+        fecha: '2025-01-20',
+        hora: '16:00',
+        cancha: 'Cancha 1',
+        local_id: '1',
+        visitante_id: '2',
+        categoria: 'Masculino',
+        copa: 'Oro',
+        ronda: 'Cuartos',
+        bracket_position: 'Q1',
+      },
+    ],
+    resultadosPlayoff: [],
   };
 }
 

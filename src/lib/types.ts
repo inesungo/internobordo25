@@ -56,4 +56,24 @@ export interface Standing {
   Pts: number;
 }
 
+export interface PartidoPlayoff {
+  id: string;
+  fecha: string; // YYYY-MM-DD
+  hora: string; // HH:mm
+  cancha?: string;
+  local_id: string;
+  visitante_id: string;
+  categoria: 'Masculino' | 'Femenino';
+  copa: 'Oro' | 'Plata';
+  ronda: 'Cuartos' | 'Semis' | 'Final';
+  bracket_position: string; // Q1, Q2, Q3, Q4, SF1, SF2, F1
+}
+
+export interface ResultadoPlayoff {
+  partido_id: string;
+  goles_local: number;
+  goles_visitante: number;
+  observaciones?: string;
+}
+
 

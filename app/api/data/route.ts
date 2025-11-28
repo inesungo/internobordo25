@@ -18,6 +18,8 @@ export async function GET() {
       goleadores: process.env.NEXT_PUBLIC_CSV_GOLEADORES ? '✓ Configurada' : '✗ No configurada',
       vallas: process.env.NEXT_PUBLIC_CSV_VALLAS ? '✓ Configurada' : '✗ No configurada',
       jugadores: process.env.NEXT_PUBLIC_CSV_JUGADORES ? '✓ Configurada' : '✗ No configurada',
+      playoffs: process.env.NEXT_PUBLIC_CSV_PLAYOFFS ? '✓ Configurada' : '✗ No configurada',
+      resultadosPlayoffs: process.env.NEXT_PUBLIC_CSV_RESULTADOS_PLAYOFFS ? '✓ Configurada' : '✗ No configurada',
     };
 
     console.log('🔍 Variables de entorno:', envVars);
@@ -31,6 +33,8 @@ export async function GET() {
       goleadores: data.goleadores.length,
       vallas: data.vallas.length,
       jugadores: data.jugadores.length,
+      partidosPlayoff: data.partidosPlayoff?.length || 0,
+      resultadosPlayoff: data.resultadosPlayoff?.length || 0,
     });
 
     return NextResponse.json(data, {
@@ -51,6 +55,8 @@ export async function GET() {
         goleadores: [],
         vallas: [],
         jugadores: [],
+        partidosPlayoff: [],
+        resultadosPlayoff: [],
       },
       { status: 500 }
     );

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import {
   Carousel,
   CarouselContent,
@@ -30,6 +31,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [animatedStats, setAnimatedStats] = useState({ equipos: 0, partidos: 0, jugadores: 0 });
+  const [showPromoPopup, setShowPromoPopup] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -171,6 +173,19 @@ export default function HomePage() {
     };
   }, []);
 
+  // Mostrar popup promocional al cargar la página
+  useEffect(() => {
+    // Verificar si el usuario ya cerró el popup anteriormente
+    const popupClosed = localStorage.getItem('promo-popup-closed');
+    if (!popupClosed) {
+      // Pequeño delay para que la página cargue primero
+      const timer = setTimeout(() => {
+        setShowPromoPopup(true);
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   // Animación de conteo para las estadísticas
   useEffect(() => {
     if (loading) return;
@@ -238,8 +253,43 @@ export default function HomePage() {
     { image: '/assets/sponsor11.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
   ];
 
+  const handleClosePromoPopup = () => {
+    setShowPromoPopup(false);
+    // Guardar en localStorage que el usuario cerró el popup
+    localStorage.setItem('promo-popup-closed', 'true');
+  };
+
   return (
     <div className="min-h-screen relative">
+      {/* Popup Promocional */}
+      <Dialog open={showPromoPopup} onOpenChange={handleClosePromoPopup}>
+        <DialogContent className="max-w-2xl w-[95%] p-0 bg-transparent border-0 shadow-none">
+          <DialogTitle className="sr-only">Promoción</DialogTitle>
+          <div className="relative">
+            <img
+              src="/assets/fiesta1.png"
+              alt="Promoción"
+              className="w-full h-auto rounded-lg"
+              onError={(e) => {
+                // Si la imagen no existe, mostrar un placeholder
+                e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="600"%3E%3Crect fill="%23ddd" width="800" height="600"/%3E%3Ctext fill="%23999" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImagen promocional%3C/text%3E%3C/svg%3E';
+              }}
+            />
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+              <Button
+                onClick={() => {
+                  window.open('https://www.instagram.com/internobordo?igsh=YXp0N2F0ZWszMTU0', '_blank');
+                  handleClosePromoPopup();
+                }}
+                className="bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-2 rounded-md font-medium shadow-lg"
+              >
+                Comprar acá
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {/* Hero Carousel */}
       <section className="relative">
         <NavBar />
