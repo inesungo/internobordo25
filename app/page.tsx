@@ -251,7 +251,7 @@ export default function HomePage() {
     { image: '/assets/sponsor9.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
     { image: '/assets/sponsor10png.png', height: 'h-12 sm:h-16 md:h-16', imageStyle: { filter: 'brightness(0)' } }, // Más chico
     { image: '/assets/sponsor11.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
-    { image: '/assets/sponsor12.png', height: 'h-20 sm:h-28 md:h-24', imageStyle: { filter: 'brightness(0)' } },
+    { image: '/assets/sponsor12.png', height: 'h-24 sm:h-32 md:h-28', imageStyle: { filter: 'brightness(0)' } }, // Más grande
   ];
 
   const handleClosePromoPopup = () => {
