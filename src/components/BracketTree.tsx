@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent } from '@/components/ui/card';
-import { Trophy, Calendar, Clock, MapPin } from 'lucide-react';
+import { Trophy, Calendar, Clock, MapPin, Info } from 'lucide-react';
 import Image from 'next/image';
 import type { PartidoPlayoff, ResultadoPlayoff, Equipo } from '@/lib/types';
 
@@ -214,6 +214,16 @@ export default function BracketTree({ partidos, resultados, equipos, copa, categ
               )}
             </div>
           </div>
+
+          {/* Observaciones */}
+          {match.resultado?.observaciones && (
+            <div className={`flex items-start gap-1.5 mt-2 pt-2 border-t border-primary/10`}>
+              <Info className={`${iconSizeClass} text-primary/60 flex-shrink-0 mt-0.5`} />
+              <span className={`${isSmall ? 'text-[10px]' : 'text-xs'} text-primary/70 italic leading-tight`}>
+                {match.resultado.observaciones}
+              </span>
+            </div>
+          )}
         </CardContent>
       </Card>
     );

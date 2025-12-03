@@ -1094,7 +1094,7 @@ export default function HomePage() {
                       <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
                         <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
                           <Image
-                            src={`${sponsor.image}?v=${SPONSORS_VERSION}`}
+                            src={sponsor.image}
                             alt={`Sponsor ${index + 1}`}
                             width={200}
                             height={80}
@@ -1130,7 +1130,7 @@ export default function HomePage() {
                       <div className={`relative w-full h-full flex items-center justify-center ${sponsor.padding || ''}`}>
                         <div className={`relative w-full ${sponsor.height || 'h-16'} flex items-center justify-center`}>
                           <Image
-                            src={`${sponsor.image}?v=${SPONSORS_VERSION}`}
+                            src={sponsor.image}
                             alt={`Sponsor ${index + 1}`}
                             width={200}
                             height={80}
